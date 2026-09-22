@@ -1,0 +1,41 @@
+{
+  "title": "Confirm I-Keeping Books product truth",
+  "question": "Your plan is the brief. Confirm these product decisions so I can write PRODUCT.md and start the build.",
+  "options": [
+    {
+      "id": "plan-as-written",
+      "label": "Build the plan as written",
+      "kicker": "RECOMMENDED",
+      "thesis": "Android Flutter app with offline SQLite CRUD, Provider, bottom nav (Home / Books / Categories / More), glass digital-library UI, and the five book categories from the plan.",
+      "palette": ["#1B2A52", "#6B5B95", "#E8EEF8", "#0F172A"],
+      "materials": ["Flutter Material 3", "SQLite / sqflite", "Provider"],
+      "viewport": "Phone-first Android: Dashboard first, then Books with FAB, Categories, Settings.",
+      "risk": "Locks stack and feature scope to the attached plan; later changes need a deliberate update."
+    },
+    {
+      "id": "android-plus-ios",
+      "label": "Flutter for Android and iOS",
+      "thesis": "Same plan features and glass library UI, but ship as adaptive Flutter for both Android and iOS from day one.",
+      "palette": ["#1B2A52", "#6B5B95", "#E8EEF8", "#0F172A"],
+      "materials": ["Flutter Material 3", "SQLite / sqflite", "Provider"],
+      "viewport": "Phone-first on both OSes; Material navigation with platform back/safe-area guarantees.",
+      "risk": "Slightly broader platform work; Android remains the primary verification target."
+    },
+    {
+      "id": "essential-only",
+      "label": "Essential CRUD only",
+      "thesis": "Ship Add / View / Edit / Delete / Search / Categories with SQLite first; defer dashboard stats, low-stock, dark mode, and About polish.",
+      "palette": ["#1B2A52", "#94A3B8", "#F1F5F9", "#0F172A"],
+      "materials": ["Flutter Material 3", "SQLite / sqflite", "Provider"],
+      "viewport": "Books list as the primary screen with FAB and search.",
+      "risk": "Faster to a working core, but the digital-library dashboard feel arrives later."
+    }
+  ],
+  "reroll": false,
+  "canon": false,
+  "steer": false,
+  "buildPath": {
+    "value": "code",
+    "toggle": true
+  }
+}
