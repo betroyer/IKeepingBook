@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="i_keeping_books"
+        android:label="I-Keeping Books"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

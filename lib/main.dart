@@ -5,6 +5,7 @@ import 'auth_gate.dart';
 import 'providers/auth_provider.dart';
 import 'providers/book_provider.dart';
 import 'providers/theme_provider.dart';
+import 'screens/splash/splash_screen.dart';
 import 'theme/app_theme.dart';
 
 void main() {
@@ -12,8 +13,15 @@ void main() {
   runApp(const IKeepingBooksApp());
 }
 
-class IKeepingBooksApp extends StatelessWidget {
+class IKeepingBooksApp extends StatefulWidget {
   const IKeepingBooksApp({super.key});
+
+  @override
+  State<IKeepingBooksApp> createState() => _IKeepingBooksAppState();
+}
+
+class _IKeepingBooksAppState extends State<IKeepingBooksApp> {
+  bool _showSplash = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +39,13 @@ class IKeepingBooksApp extends StatelessWidget {
             theme: AppTheme.light(),
             darkTheme: AppTheme.dark(),
             themeMode: theme.themeMode,
-            home: const AuthGate(),
+            home: _showSplash
+                ? SplashScreen(
+                    onFinished: () {
+                      if (mounted) setState(() => _showSplash = false);
+                    },
+                  )
+                : const AuthGate(),
           );
         },
       ),
