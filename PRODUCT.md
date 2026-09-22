@@ -38,12 +38,14 @@ Confirmed:
 - FAB on Books to add
 - Empty states, validation, delete and clear-all confirmations, SnackBar feedback
 - Dark mode toggle in Settings
+- Local Log in / Sign up (accounts stored on device in SQLite; session via SharedPreferences)
+- Log out from More
 - No internet requirement
 
 Undecided / out of scope for v1:
 - Custom user-defined categories beyond the five
 - Cover images, ISBNs, authors, lending
-- Cloud backup or multi-device sync
+- Cloud backup, multi-device sync, or remote authentication
 - iOS shipping (Android-first per plan; not selected in init)
 
 ## Brand Commitments

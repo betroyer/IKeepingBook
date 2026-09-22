@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'app_shell.dart';
+import 'auth_gate.dart';
+import 'providers/auth_provider.dart';
 import 'providers/book_provider.dart';
 import 'providers/theme_provider.dart';
 import 'theme/app_theme.dart';
@@ -19,6 +20,7 @@ class IKeepingBooksApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()..restoreSession()),
         ChangeNotifierProvider(create: (_) => BookProvider()..load()),
       ],
       child: Consumer<ThemeProvider>(
@@ -29,7 +31,7 @@ class IKeepingBooksApp extends StatelessWidget {
             theme: AppTheme.light(),
             darkTheme: AppTheme.dark(),
             themeMode: theme.themeMode,
-            home: const AppShell(),
+            home: const AuthGate(),
           );
         },
       ),

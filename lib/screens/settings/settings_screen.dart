@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../providers/book_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../theme/app_colors.dart';
@@ -14,6 +15,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeProvider>();
     final books = context.watch<BookProvider>();
+    final auth = context.watch<AuthProvider>();
+    final user = auth.user;
 
     return CustomScrollView(
       slivers: [
@@ -25,6 +28,52 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
+              if (user != null) ...[
+                _SectionLabel('Account'),
+                GlassCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.name,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        user.email,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.labelMuted,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GlassCard(
+                  onTap: () => _confirmLogout(context),
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout_rounded, color: AppColors.signalRed),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Log out',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.signalRed,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
               _SectionLabel('Appearance'),
               GlassCard(
                 child: Row(
@@ -159,6 +208,32 @@ class SettingsScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _confirmLogout(BuildContext context) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Log out?'),
+        content: const Text(
+          'You will need to sign in again to open the library. '
+          'Your books stay on this device.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Log out'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true && context.mounted) {
+      await context.read<AuthProvider>().logout();
+    }
   }
 
   Future<void> _confirmClear(BuildContext context) async {

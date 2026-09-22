@@ -1,8 +1,10 @@
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
+import '../models/app_user.dart';
 import '../models/book.dart';
 import '../utils/constants.dart';
+import '../utils/password_hasher.dart';
 
 class DatabaseHelper {
   DatabaseHelper._();
@@ -21,20 +23,43 @@ class DatabaseHelper {
     final path = p.join(dbPath, AppConstants.dbName);
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE books (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            quantity INTEGER NOT NULL,
-            category TEXT NOT NULL,
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL
-          )
-        ''');
+        await _createBooks(db);
+        await _createUsers(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await _createUsers(db);
+        }
       },
     );
+  }
+
+  Future<void> _createBooks(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS books (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        category TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+  }
+
+  Future<void> _createUsers(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+        password_hash TEXT NOT NULL,
+        salt TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      )
+    ''');
   }
 
   Future<int> insertBook(Book book) async {
@@ -77,5 +102,79 @@ class DatabaseHelper {
       orderBy: 'name COLLATE NOCASE ASC',
     );
     return rows.map(Book.fromMap).toList();
+  }
+
+  Future<AppUser?> getUserById(int id) async {
+    final db = await database;
+    final rows = await db.query(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return AppUser.fromMap(rows.first);
+  }
+
+  Future<AppUser?> getUserByEmail(String email) async {
+    final db = await database;
+    final rows = await db.query(
+      'users',
+      where: 'LOWER(email) = ?',
+      whereArgs: [email.trim().toLowerCase()],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return AppUser.fromMap(rows.first);
+  }
+
+  Future<bool> emailExists(String email) async {
+    return (await getUserByEmail(email)) != null;
+  }
+
+  Future<AppUser> createUser({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    final db = await database;
+    final salt = PasswordHasher.generateSalt();
+    final hash = PasswordHasher.hash(password, salt);
+    final now = DateTime.now().toIso8601String();
+    final id = await db.insert('users', {
+      'name': name.trim(),
+      'email': email.trim().toLowerCase(),
+      'password_hash': hash,
+      'salt': salt,
+      'created_at': now,
+    });
+    return AppUser(
+      id: id,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      createdAt: DateTime.parse(now),
+    );
+  }
+
+  Future<AppUser?> authenticate({
+    required String email,
+    required String password,
+  }) async {
+    final db = await database;
+    final rows = await db.query(
+      'users',
+      where: 'LOWER(email) = ?',
+      whereArgs: [email.trim().toLowerCase()],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    final row = rows.first;
+    final ok = PasswordHasher.verify(
+      password,
+      row['salt'] as String,
+      row['password_hash'] as String,
+    );
+    if (!ok) return null;
+    return AppUser.fromMap(row);
   }
 }
