@@ -82,7 +82,7 @@ class AppTheme {
       dialogTheme: DialogThemeData(
         backgroundColor: brightness == Brightness.dark
             ? AppColors.caseIndigo
-            : const Color(0xFFF4F7FC),
+            : const Color(0xFFFFF8F0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       inputDecorationTheme: InputDecorationTheme(

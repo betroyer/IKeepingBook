@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
       return EmptyState(
         title: 'No books yet',
         message:
-            'Your glass case is empty. Add the first title to start this library.',
+            'Your library is empty. Add the first title to start this shelf.',
         actionLabel: 'Add book',
         onAction: () => _openAdd(context),
       );

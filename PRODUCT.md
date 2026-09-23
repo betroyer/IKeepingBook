@@ -54,10 +54,11 @@ Undecided / out of scope for v1:
 ## Brand Commitments
 
 - Name: **I-Keeping Books**
-- Visual direction from the plan (binding): Glassmorphism Digital Library — soft gradient backgrounds, translucent glass cards, blur, thin borders, rounded corners, subtle shadows
-- Color direction from the plan: deep blue/indigo primary, soft purple secondary, light blue/purple gradient background, dark navy primary text, gray secondary; green normal / amber low-stock / red error
-- Typography direction from the plan: Poppins or Inter; Material type roles preferred for Android
-- Feel: small personal digital library, not a bare CRUD admin tool
+- Mark: circular “Only Hope / I-Keeping Books” logo (`assets/branding/logo.png`) — books + mug badge on a warm library background
+- Visual direction: Glassmorphism over a cozy library wash — cream frosted panes, soft rosewood primary, pastel pink secondary, dusty-rose / peach backgrounds drawn from the logo
+- Color direction from logo: cream `#FFF5EE`, peach `#F0D9CC`, dusty rose `#E8C4B8` / `#E8D5C8`, rosewood primary `#7A3F4A`, pastel pink `#D4899A`, taupe edge `#C4A894`, near-black ink; green / amber / red for stock signals only
+- Typography: Poppins; Material type roles preferred for Android
+- Feel: warm personal reading-nook library, not a cool indigo admin tool or bare CRUD shell
 
 ## Evidence on Hand
 

@@ -18,13 +18,13 @@ class CaseBackground extends StatelessWidget {
           colors: isDark
               ? const [
                   AppColors.caseDeep,
-                  AppColors.caseIndigo,
-                  Color(0xFF2A1F3D),
+                  Color(0xFF3D2418),
+                  Color(0xFF4A2C30),
                 ]
               : const [
-                  Color(0xFFE8EEF8),
-                  Color(0xFFC5D0EA),
-                  Color(0xFFD8D0EA),
+                  AppColors.creamWash,
+                  AppColors.peachWash,
+                  AppColors.roseWash,
                 ],
         ),
       ),
@@ -35,7 +35,7 @@ class CaseBackground extends StatelessWidget {
             right: -40,
             child: _Glow(
               color: AppColors.purpleSecondary.withValues(
-                alpha: isDark ? 0.28 : 0.18,
+                alpha: isDark ? 0.22 : 0.20,
               ),
               size: 220,
             ),
@@ -44,9 +44,8 @@ class CaseBackground extends StatelessWidget {
             bottom: 120,
             left: -60,
             child: _Glow(
-              color: AppColors.caseIndigo.withValues(
-                alpha: isDark ? 0.35 : 0.12,
-              ),
+              color: (isDark ? AppColors.caseIndigo : AppColors.mintAccent)
+                  .withValues(alpha: isDark ? 0.30 : 0.22),
               size: 260,
             ),
           ),
