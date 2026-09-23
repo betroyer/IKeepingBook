@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../screens/books/books_screen.dart';
+import '../screens/borrow/borrow_screen.dart';
 import '../screens/categories/categories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/settings/settings_screen.dart';
@@ -32,6 +33,7 @@ class _AppShellState extends State<AppShell> {
     final pages = [
       HomeScreen(onOpenBooks: _goBooks),
       const BooksScreen(),
+      const BorrowScreen(),
       CategoriesScreen(onOpenBooks: _goBooks),
       const SettingsScreen(),
     ];
@@ -60,6 +62,11 @@ class _AppShellState extends State<AppShell> {
                 icon: Icon(Icons.menu_book_outlined),
                 selectedIcon: Icon(Icons.menu_book_rounded),
                 label: 'Books',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.assignment_outlined),
+                selectedIcon: Icon(Icons.assignment_rounded),
+                label: 'Borrow',
               ),
               NavigationDestination(
                 icon: Icon(Icons.category_outlined),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'auth_gate.dart';
 import 'providers/auth_provider.dart';
 import 'providers/book_provider.dart';
+import 'providers/borrow_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/splash/splash_screen.dart';
 import 'theme/app_theme.dart';
@@ -30,6 +31,7 @@ class _IKeepingBooksAppState extends State<IKeepingBooksApp> {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()..restoreSession()),
         ChangeNotifierProvider(create: (_) => BookProvider()..load()),
+        ChangeNotifierProvider(create: (_) => BorrowProvider()..load()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, theme, _) {

@@ -5,12 +5,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:i_keeping_books/app_shell.dart';
 import 'package:i_keeping_books/models/book.dart';
+import 'package:i_keeping_books/models/borrow_record.dart';
 import 'package:i_keeping_books/providers/book_provider.dart';
+import 'package:i_keeping_books/providers/borrow_provider.dart';
 import 'package:i_keeping_books/providers/theme_provider.dart';
 import 'package:i_keeping_books/services/book_service.dart';
+import 'package:i_keeping_books/services/borrow_service.dart';
 import 'package:i_keeping_books/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class FakeBorrowService extends BorrowService {
+  @override
+  Future<List<BorrowRecord>> fetchAll() async => [];
+}
 
 class FakeBookService extends BookService {
   FakeBookService(this._books);
@@ -125,6 +133,9 @@ Widget wrapShell(BookProvider books, {int tab = 0}) {
     providers: [
       ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ChangeNotifierProvider.value(value: books),
+      ChangeNotifierProvider(
+        create: (_) => BorrowProvider(service: FakeBorrowService())..load(),
+      ),
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,

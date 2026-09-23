@@ -64,4 +64,18 @@ class Validators {
     }
     return null;
   }
+
+  static String? requiredField(String? value, String label) {
+    if (value == null || value.trim().isEmpty) {
+      return '$label cannot be empty';
+    }
+    return null;
+  }
+
+  static String? studentId(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Student ID cannot be empty';
+    }
+    return null;
+  }
 }

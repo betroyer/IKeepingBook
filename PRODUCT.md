@@ -40,11 +40,12 @@ Confirmed:
 - Dark mode toggle in Settings
 - Local Log in / Sign up (accounts stored on device in SQLite; session via SharedPreferences)
 - Log out from More
+- Student borrow records: full name, student ID, college (course & year) or high school (strand & year), borrow date, return due date; mark returned; stock decreases/increases with loan/return
 - No internet requirement
 
 Undecided / out of scope for v1:
 - Custom user-defined categories beyond the five
-- Cover images, ISBNs, authors, lending
+- Cover images, ISBNs, authors, lending fines/penalties beyond due-date overdue flag
 - Cloud backup, multi-device sync, or remote authentication
 - iOS shipping (Android-first per plan; not selected in init)
 

@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../models/app_user.dart';
 import '../models/book.dart';
+import '../models/borrow_record.dart';
 import '../utils/constants.dart';
 import '../utils/password_hasher.dart';
 
@@ -23,14 +24,18 @@ class DatabaseHelper {
     final path = p.join(dbPath, AppConstants.dbName);
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await _createBooks(db);
         await _createUsers(db);
+        await _createBorrows(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await _createUsers(db);
+        }
+        if (oldVersion < 3) {
+          await _createBorrows(db);
         }
       },
     );
@@ -62,6 +67,25 @@ class DatabaseHelper {
     ''');
   }
 
+  Future<void> _createBorrows(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS borrows (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        book_id INTEGER NOT NULL,
+        book_name TEXT NOT NULL,
+        student_full_name TEXT NOT NULL,
+        student_id TEXT NOT NULL,
+        student_level TEXT NOT NULL,
+        program TEXT NOT NULL,
+        year_level TEXT NOT NULL,
+        borrowed_at TEXT NOT NULL,
+        due_date TEXT NOT NULL,
+        returned_at TEXT,
+        FOREIGN KEY (book_id) REFERENCES books (id)
+      )
+    ''');
+  }
+
   Future<int> insertBook(Book book) async {
     final db = await database;
     return db.insert('books', book.toMap()..remove('id'));
@@ -71,6 +95,18 @@ class DatabaseHelper {
     final db = await database;
     final rows = await db.query('books', orderBy: 'created_at DESC');
     return rows.map(Book.fromMap).toList();
+  }
+
+  Future<Book?> getBookById(int id) async {
+    final db = await database;
+    final rows = await db.query(
+      'books',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    return Book.fromMap(rows.first);
   }
 
   Future<int> updateBook(Book book) async {
@@ -176,5 +212,121 @@ class DatabaseHelper {
     );
     if (!ok) return null;
     return AppUser.fromMap(row);
+  }
+
+  Future<List<BorrowRecord>> getAllBorrows() async {
+    final db = await database;
+    final rows = await db.query('borrows', orderBy: 'borrowed_at DESC');
+    return rows.map(BorrowRecord.fromMap).toList();
+  }
+
+  Future<BorrowRecord> createBorrow({
+    required Book book,
+    required String studentFullName,
+    required String studentId,
+    required StudentLevel studentLevel,
+    required String program,
+    required String yearLevel,
+    required DateTime borrowedAt,
+    required DateTime dueDate,
+  }) async {
+    if (book.id == null) {
+      throw Exception('Select a book from the library.');
+    }
+    final db = await database;
+    return db.transaction((txn) async {
+      final bookRows = await txn.query(
+        'books',
+        where: 'id = ?',
+        whereArgs: [book.id],
+        limit: 1,
+      );
+      if (bookRows.isEmpty) {
+        throw Exception('That book is no longer in the library.');
+      }
+      final current = Book.fromMap(bookRows.first);
+      if (current.quantity < 1) {
+        throw Exception('No copies available to borrow.');
+      }
+
+      final record = BorrowRecord(
+        bookId: current.id!,
+        bookName: current.name,
+        studentFullName: studentFullName.trim(),
+        studentId: studentId.trim(),
+        studentLevel: studentLevel,
+        program: program.trim(),
+        yearLevel: yearLevel.trim(),
+        borrowedAt: borrowedAt,
+        dueDate: dueDate,
+      );
+
+      final id = await txn.insert('borrows', record.toMap()..remove('id'));
+      final updated = current.copyWith(
+        quantity: current.quantity - 1,
+        updatedAt: DateTime.now(),
+      );
+      await txn.update(
+        'books',
+        updated.toMap(),
+        where: 'id = ?',
+        whereArgs: [current.id],
+      );
+      return record.copyWith(id: id);
+    });
+  }
+
+  Future<BorrowRecord> returnBorrow(BorrowRecord record) async {
+    if (record.id == null) {
+      throw Exception('Invalid borrow record.');
+    }
+    if (record.isReturned) {
+      throw Exception('This book was already returned.');
+    }
+    final db = await database;
+    return db.transaction((txn) async {
+      final rows = await txn.query(
+        'borrows',
+        where: 'id = ?',
+        whereArgs: [record.id],
+        limit: 1,
+      );
+      if (rows.isEmpty) {
+        throw Exception('Borrow record not found.');
+      }
+      final existing = BorrowRecord.fromMap(rows.first);
+      if (existing.isReturned) {
+        throw Exception('This book was already returned.');
+      }
+
+      final returned = existing.copyWith(returnedAt: DateTime.now());
+      await txn.update(
+        'borrows',
+        returned.toMap(),
+        where: 'id = ?',
+        whereArgs: [returned.id],
+      );
+
+      final bookRows = await txn.query(
+        'books',
+        where: 'id = ?',
+        whereArgs: [existing.bookId],
+        limit: 1,
+      );
+      if (bookRows.isNotEmpty) {
+        final book = Book.fromMap(bookRows.first);
+        final updated = book.copyWith(
+          quantity: book.quantity + 1,
+          updatedAt: DateTime.now(),
+        );
+        await txn.update(
+          'books',
+          updated.toMap(),
+          where: 'id = ?',
+          whereArgs: [book.id],
+        );
+      }
+      return returned;
+    });
   }
 }
