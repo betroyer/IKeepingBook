@@ -15,23 +15,19 @@ class NotificationService {
 
   Future<void> init() async {
     if (_ready) return;
+    tzdata.initializeTimeZones();
     try {
-      tzdata.initializeTimeZones();
-      try {
-        tz.setLocalLocation(tz.getLocation('Asia/Manila'));
-      } catch (_) {
-        // Fall back to default local zone if available.
-      }
-      const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-      const init = InitializationSettings(android: android);
-      await _plugin.initialize(init);
-      final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
-      await androidPlugin?.requestNotificationsPermission();
-      _ready = true;
-    } catch (e) {
-      debugPrint('Notifications unavailable: $e');
+      tz.setLocalLocation(tz.getLocation('Asia/Manila'));
+    } catch (_) {
+      // Fall back to default local zone if available.
     }
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const init = InitializationSettings(android: android);
+    await _plugin.initialize(init);
+    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.requestNotificationsPermission();
+    _ready = true;
   }
 
   Future<void> showDueSoonSummary(List<BorrowRecord> dueSoon) async {
