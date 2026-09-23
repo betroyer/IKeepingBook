@@ -248,6 +248,7 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
                     DropdownButtonFormField<Book>(
                       // ignore: deprecated_member_use
                       value: books.contains(_book) ? _book : null,
+                      isExpanded: true,
                       decoration: const InputDecoration(
                         labelText: 'Book to borrow',
                       ),
