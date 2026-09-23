@@ -7,6 +7,26 @@ class EmailService {
   EmailService._();
   static final EmailService instance = EmailService._();
 
+  Future<void> sendTestEmail({required String toEmail}) async {
+    final settings = await SmtpSettingsStore.load();
+    if (!settings.isConfigured) {
+      throw Exception(
+        'Save an enabled library Gmail and App Password first.',
+      );
+    }
+    await _send(
+      settings: settings,
+      toEmail: toEmail,
+      subject: 'I-Keeping Books — test email',
+      body: '''
+This is a test message from I-Keeping Books.
+
+If you received this, library Gmail SMTP is working. Students can now get
+borrow receipts and due-soon reminders from this account.
+''',
+    );
+  }
+
   Future<void> sendBorrowConfirmation({
     required String toEmail,
     required String studentName,
