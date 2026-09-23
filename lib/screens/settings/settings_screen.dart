@@ -167,7 +167,7 @@ class SettingsScreen extends StatelessWidget {
                                 ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            'SMTP for student due-date emails',
+                            'Library Gmail for student notices',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
@@ -326,7 +326,8 @@ class _SectionLabel extends StatelessWidget {
         text,
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.purpleSecondary,
+              letterSpacing: 0.2,
+              color: AppColors.caseIndigo,
             ),
       ),
     );

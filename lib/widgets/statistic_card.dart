@@ -25,26 +25,27 @@ class StatisticCard extends StatelessWidget {
     final theme = Theme.of(context);
     return GlassCard(
       onTap: onTap,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 18, color: AppColors.purpleSecondary),
+              Icon(icon, size: 18, color: AppColors.caseIndigo),
               const Spacer(),
               if (status != null) SignalLamp(status: status!),
             ],
           ),
-          const SizedBox(height: 12),
+          const Spacer(),
           Text(
             value,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
-              letterSpacing: -0.5,
+              letterSpacing: -0.4,
+              height: 1.1,
             ),
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 4),
           Text(
             label,
             style: theme.textTheme.labelMedium?.copyWith(

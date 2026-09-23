@@ -19,11 +19,16 @@ class SmtpSettings {
   final String fromName;
   final bool useSsl;
 
+  bool get isGmail {
+    final u = username.trim().toLowerCase();
+    return u.endsWith('@gmail.com') || u.endsWith('@googlemail.com');
+  }
+
   bool get isConfigured =>
       enabled &&
-      host.trim().isNotEmpty &&
-      username.trim().isNotEmpty &&
-      password.isNotEmpty;
+      isGmail &&
+      password.isNotEmpty &&
+      host.trim().isNotEmpty;
 
   static const empty = SmtpSettings(
     enabled: false,
@@ -63,11 +68,11 @@ class SmtpSettingsStore {
   static Future<void> save(SmtpSettings s) async {
     final p = await SharedPreferences.getInstance();
     await p.setBool(_enabled, s.enabled);
-    await p.setString(_host, s.host.trim());
-    await p.setInt(_port, s.port);
+    await p.setString(_host, 'smtp.gmail.com');
+    await p.setInt(_port, 465);
     await p.setString(_user, s.username.trim());
     await p.setString(_pass, s.password);
     await p.setString(_from, s.fromName.trim());
-    await p.setBool(_ssl, s.useSsl);
+    await p.setBool(_ssl, true);
   }
 }

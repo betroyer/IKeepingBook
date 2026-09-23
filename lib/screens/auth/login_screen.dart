@@ -49,11 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Image.asset(
                       'assets/branding/logo.png',
-                      height: 112,
+                      height: 96,
                       fit: BoxFit.contain,
                       filterQuality: FilterQuality.high,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     Text(
                       'I-Keeping Books',
                       textAlign: TextAlign.center,
@@ -62,25 +62,33 @@ class _LoginScreenState extends State<LoginScreen> {
                         letterSpacing: -0.4,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     Text(
-                      'Sign in to open your library',
+                      'Sign in to manage your library inventory',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: AppColors.labelMuted,
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
                     GlassCard(
+                      elevated: true,
                       child: Form(
                         key: _formKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              'Log in',
+                              'Sign in',
                               style: theme.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Use your on-device librarian account',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppColors.labelMuted,
                               ),
                             ),
                             const SizedBox(height: 18),

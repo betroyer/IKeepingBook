@@ -26,11 +26,20 @@ class EmptyState extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: GlassCard(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 40, color: AppColors.purpleSecondary),
-              const SizedBox(height: 12),
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: AppColors.caseIndigo.withValues(alpha: 0.10),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 28, color: AppColors.caseIndigo),
+              ),
+              const SizedBox(height: 16),
               Text(
                 title,
                 textAlign: TextAlign.center,
@@ -44,13 +53,17 @@ class EmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppColors.labelMuted,
+                  height: 1.45,
                 ),
               ),
               if (actionLabel != null && onAction != null) ...[
-                const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: onAction,
-                  child: Text(actionLabel!),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: onAction,
+                    child: Text(actionLabel!),
+                  ),
                 ),
               ],
             ],

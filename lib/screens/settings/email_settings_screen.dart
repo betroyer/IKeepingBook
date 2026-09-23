@@ -14,15 +14,13 @@ class EmailSettingsScreen extends StatefulWidget {
 }
 
 class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
-  final _host = TextEditingController();
-  final _port = TextEditingController();
   final _user = TextEditingController();
   final _pass = TextEditingController();
   final _from = TextEditingController();
   bool _enabled = false;
-  bool _ssl = true;
   bool _loading = true;
   bool _saving = false;
+  String? _error;
 
   @override
   void initState() {
@@ -35,20 +33,15 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
     if (!mounted) return;
     setState(() {
       _enabled = s.enabled;
-      _host.text = s.host;
-      _port.text = s.port.toString();
       _user.text = s.username;
       _pass.text = s.password;
       _from.text = s.fromName;
-      _ssl = s.useSsl;
       _loading = false;
     });
   }
 
   @override
   void dispose() {
-    _host.dispose();
-    _port.dispose();
     _user.dispose();
     _pass.dispose();
     _from.dispose();
@@ -71,7 +64,7 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Student email notices',
+                          'Library Gmail account',
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
@@ -79,20 +72,24 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'When SMTP is enabled, verified student emails receive a '
-                          'reminder 1 day before the return date. Librarian '
-                          'device notifications work even without SMTP.',
+                          'Use a real Gmail account for the library. Students '
+                          'receive a borrow receipt when a loan is saved, and a '
+                          'return reminder 1 day before the due date.\n\n'
+                          'Create a Google App Password (Google Account → '
+                          'Security → 2-Step Verification → App passwords) and '
+                          'paste it below — not your normal Gmail password.',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: AppColors.labelMuted,
+                                    height: 1.45,
                                   ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
                               child: Text(
-                                'Enable SMTP email',
+                                'Send student emails',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -105,44 +102,15 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _host,
-                          decoration: const InputDecoration(
-                            labelText: 'SMTP host',
-                            hintText: 'smtp.gmail.com',
-                          ),
-                        ),
                         const SizedBox(height: 12),
-                        TextField(
-                          controller: _port,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: 'Port',
-                            hintText: '465',
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Use SSL',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                            Switch(
-                              value: _ssl,
-                              onChanged: (v) => setState(() => _ssl = v),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
                         TextField(
                           controller: _user,
                           keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [AutofillHints.email],
                           decoration: const InputDecoration(
-                            labelText: 'SMTP username / from email',
+                            labelText: 'Library Gmail',
+                            hintText: 'yourlibrary@gmail.com',
+                            prefixIcon: Icon(Icons.mail_outline_rounded),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -150,7 +118,9 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
                           controller: _pass,
                           obscureText: true,
                           decoration: const InputDecoration(
-                            labelText: 'SMTP password / app password',
+                            labelText: 'Gmail App Password',
+                            hintText: '16-character app password',
+                            prefixIcon: Icon(Icons.lock_outline_rounded),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -158,11 +128,30 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
                           controller: _from,
                           decoration: const InputDecoration(
                             labelText: 'From display name',
+                            hintText: 'I-Keeping Books Library',
                           ),
+                        ),
+                        if (_error != null) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            _error!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: AppColors.signalRed),
+                          ),
+                        ],
+                        const SizedBox(height: 8),
+                        Text(
+                          'SMTP: smtp.gmail.com · port 465 · SSL',
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: AppColors.labelMuted,
+                                  ),
                         ),
                         const SizedBox(height: 20),
                         GlassButton(
-                          label: _saving ? 'Saving…' : 'Save email settings',
+                          label: _saving ? 'Saving…' : 'Save Gmail settings',
                           icon: Icons.save_rounded,
                           onPressed: _saving ? null : _save,
                         ),
@@ -176,23 +165,39 @@ class _EmailSettingsScreenState extends State<EmailSettingsScreen> {
   }
 
   Future<void> _save() async {
-    setState(() => _saving = true);
-    final port = int.tryParse(_port.text.trim()) ?? 465;
+    final user = _user.text.trim().toLowerCase();
+    if (_enabled) {
+      if (!(user.endsWith('@gmail.com') || user.endsWith('@googlemail.com'))) {
+        setState(() => _error = 'Enter a valid Gmail address (@gmail.com).');
+        return;
+      }
+      if (_pass.text.trim().isEmpty) {
+        setState(() => _error = 'Enter the Gmail App Password.');
+        return;
+      }
+    }
+
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
     await SmtpSettingsStore.save(
       SmtpSettings(
         enabled: _enabled,
-        host: _host.text,
-        port: port,
-        username: _user.text,
-        password: _pass.text,
-        fromName: _from.text,
-        useSsl: _ssl,
+        host: 'smtp.gmail.com',
+        port: 465,
+        username: user,
+        password: _pass.text.trim(),
+        fromName: _from.text.trim().isEmpty
+            ? SmtpSettings.empty.fromName
+            : _from.text.trim(),
+        useSsl: true,
       ),
     );
     if (!mounted) return;
     setState(() => _saving = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Email settings saved')),
+      const SnackBar(content: Text('Library Gmail settings saved')),
     );
   }
 }

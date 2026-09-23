@@ -79,7 +79,7 @@ class BookCard extends StatelessWidget {
             onPressed: onDelete,
             icon: Icon(
               Icons.delete_outline_rounded,
-              color: AppColors.signalRed.withValues(alpha: 0.9),
+              color: AppColors.signalRed.withValues(alpha: 0.75),
             ),
           ),
         ],

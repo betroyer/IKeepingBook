@@ -6,6 +6,7 @@ import '../screens/borrow/borrow_screen.dart';
 import '../screens/categories/categories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/settings/settings_screen.dart';
+import '../theme/app_colors.dart';
 import '../widgets/case_background.dart';
 
 class AppShell extends StatefulWidget {
@@ -49,36 +50,48 @@ class _AppShellState extends State<AppShell> {
             bottom: false,
             child: pages[_index],
           ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: _index,
-            onDestinationSelected: (i) => setState(() => _index = i),
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home_rounded),
-                label: 'Home',
+          bottomNavigationBar: Material(
+            color: Colors.transparent,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: AppColors.metalEdge.withValues(alpha: 0.35),
+                  ),
+                ),
               ),
-              NavigationDestination(
-                icon: Icon(Icons.menu_book_outlined),
-                selectedIcon: Icon(Icons.menu_book_rounded),
-                label: 'Books',
+              child: NavigationBar(
+                selectedIndex: _index,
+                onDestinationSelected: (i) => setState(() => _index = i),
+                destinations: const [
+                  NavigationDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home_rounded),
+                    label: 'Home',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.menu_book_outlined),
+                    selectedIcon: Icon(Icons.menu_book_rounded),
+                    label: 'Books',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.assignment_outlined),
+                    selectedIcon: Icon(Icons.assignment_rounded),
+                    label: 'Borrow',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.category_outlined),
+                    selectedIcon: Icon(Icons.category_rounded),
+                    label: 'Categories',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.more_horiz),
+                    selectedIcon: Icon(Icons.more_horiz),
+                    label: 'More',
+                  ),
+                ],
               ),
-              NavigationDestination(
-                icon: Icon(Icons.assignment_outlined),
-                selectedIcon: Icon(Icons.assignment_rounded),
-                label: 'Borrow',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.category_outlined),
-                selectedIcon: Icon(Icons.category_rounded),
-                label: 'Categories',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.more_horiz),
-                selectedIcon: Icon(Icons.more_horiz),
-                label: 'More',
-              ),
-            ],
+            ),
           ),
         ),
       ),

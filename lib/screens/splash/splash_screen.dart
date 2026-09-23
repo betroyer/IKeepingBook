@@ -109,12 +109,12 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  'Opening your library…',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.labelMuted,
-                      ),
-                ),
+                  Text(
+                    'Opening your library…',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.labelMuted,
+                        ),
+                  ),
               ],
             ),
           ),

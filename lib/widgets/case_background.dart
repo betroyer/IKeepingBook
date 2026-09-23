@@ -13,40 +13,42 @@ class CaseBackground extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: isDark
               ? const [
                   AppColors.caseDeep,
-                  Color(0xFF3D2418),
-                  Color(0xFF4A2C30),
+                  Color(0xFF301C16),
+                  Color(0xFF3A2228),
                 ]
               : const [
                   AppColors.creamWash,
                   AppColors.peachWash,
                   AppColors.roseWash,
                 ],
+          stops: const [0.0, 0.55, 1.0],
         ),
       ),
       child: Stack(
         children: [
           Positioned(
-            top: -80,
-            right: -40,
+            top: -100,
+            right: -50,
             child: _Glow(
               color: AppColors.purpleSecondary.withValues(
-                alpha: isDark ? 0.22 : 0.20,
+                alpha: isDark ? 0.12 : 0.10,
               ),
-              size: 220,
+              size: 200,
             ),
           ),
           Positioned(
-            bottom: 120,
-            left: -60,
+            bottom: 80,
+            left: -70,
             child: _Glow(
-              color: (isDark ? AppColors.caseIndigo : AppColors.mintAccent)
-                  .withValues(alpha: isDark ? 0.30 : 0.22),
-              size: 260,
+              color: AppColors.caseIndigo.withValues(
+                alpha: isDark ? 0.18 : 0.07,
+              ),
+              size: 240,
             ),
           ),
           child,

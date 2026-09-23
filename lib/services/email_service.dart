@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
@@ -9,35 +7,36 @@ class EmailService {
   EmailService._();
   static final EmailService instance = EmailService._();
 
-  String generateVerificationCode() {
-    final n = Random.secure().nextInt(900000) + 100000;
-    return n.toString();
-  }
-
-  Future<void> sendVerificationCode({
+  Future<void> sendBorrowConfirmation({
     required String toEmail,
     required String studentName,
-    required String code,
+    required String bookName,
+    required String borrowedLabel,
+    required String dueDateLabel,
   }) async {
     final settings = await SmtpSettingsStore.load();
     if (!settings.isConfigured) {
       throw Exception(
-        'Email SMTP is not configured. Open More → Email reminders to set it up, '
-        'or use on-device verification.',
+        'Library Gmail is not set up. Open More → Email reminders '
+        'and add a Gmail account with an App Password.',
       );
     }
     await _send(
       settings: settings,
       toEmail: toEmail,
-      subject: 'Verify your email — I-Keeping Books',
+      subject: 'Library borrow receipt — $bookName',
       body: '''
 Hello $studentName,
 
-Your library email verification code is:
+This is a confirmation from your school library (I-Keeping Books).
 
-$code
+You borrowed: $bookName
+Borrowed on: $borrowedLabel
+Return due: $dueDateLabel
 
-Enter this code in I-Keeping Books to verify your email for borrow reminders.
+Please return the book on or before the due date. You will also receive a reminder by email 1 day before it is due.
+
+Thank you!
 ''',
     );
   }
@@ -50,7 +49,7 @@ Enter this code in I-Keeping Books to verify your email for borrow reminders.
   }) async {
     final settings = await SmtpSettingsStore.load();
     if (!settings.isConfigured) {
-      throw Exception('Email SMTP is not configured.');
+      throw Exception('Library Gmail is not set up.');
     }
     await _send(
       settings: settings,
@@ -75,15 +74,18 @@ Please return the book on or before the due date. Thank you!
     required String subject,
     required String body,
   }) async {
-    final server = SmtpServer(
-      settings.host,
-      port: settings.port,
-      ssl: settings.useSsl,
-      username: settings.username,
-      password: settings.password,
-    );
+    final user = settings.username.trim();
+    final server = settings.isGmail
+        ? gmail(user, settings.password)
+        : SmtpServer(
+            settings.host,
+            port: settings.port,
+            ssl: settings.useSsl,
+            username: user,
+            password: settings.password,
+          );
     final message = Message()
-      ..from = Address(settings.username, settings.fromName)
+      ..from = Address(user, settings.fromName)
       ..recipients.add(toEmail.trim())
       ..subject = subject
       ..text = body;

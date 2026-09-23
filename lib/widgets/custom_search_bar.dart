@@ -35,13 +35,18 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return TextField(
       controller: widget.controller,
       onChanged: widget.onChanged,
       textInputAction: TextInputAction.search,
+      style: Theme.of(context).textTheme.bodyLarge,
       decoration: InputDecoration(
         hintText: widget.hint,
-        prefixIcon: const Icon(Icons.search_rounded),
+        prefixIcon: Icon(
+          Icons.search_rounded,
+          color: AppColors.labelMuted.withValues(alpha: 0.9),
+        ),
         suffixIcon: widget.controller.text.isEmpty
             ? null
             : IconButton(
@@ -53,13 +58,26 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 icon: const Icon(Icons.close_rounded),
               ),
         filled: true,
-        fillColor: Theme.of(context).brightness == Brightness.dark
+        fillColor: isDark
             ? Colors.white.withValues(alpha: 0.08)
-            : Colors.white.withValues(alpha: 0.65),
+            : Colors.white.withValues(alpha: 0.78),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
-            color: AppColors.metalEdge.withValues(alpha: 0.5),
+            color: AppColors.metalEdge.withValues(alpha: 0.45),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(
+            color: AppColors.metalEdge.withValues(alpha: 0.4),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(
+            color: AppColors.caseIndigo,
+            width: 1.5,
           ),
         ),
       ),

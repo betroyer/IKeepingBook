@@ -12,7 +12,7 @@ class ReminderService {
 
   final _dateFormat = DateFormat.yMMMd();
 
-  /// Librarian device alerts + optional student emails (needs SMTP + verified email).
+  /// Librarian device alerts + student Gmail notices (library Gmail SMTP).
   Future<ReminderRunResult> runDueSoonPass(List<BorrowRecord> records) async {
     final dueSoon = records.where((r) => r.isDueSoon).toList();
     final overdue = records.where((r) => r.isOverdue).toList();
@@ -28,8 +28,7 @@ class ReminderService {
 
     if (smtp.isConfigured) {
       for (final record in dueSoon) {
-        if (!record.emailVerified ||
-            record.studentEmail.isEmpty ||
+        if (record.studentEmail.isEmpty ||
             record.reminderSent ||
             record.id == null) {
           continue;

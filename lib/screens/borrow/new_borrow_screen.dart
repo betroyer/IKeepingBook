@@ -6,7 +6,6 @@ import '../../models/book.dart';
 import '../../models/borrow_record.dart';
 import '../../providers/book_provider.dart';
 import '../../providers/borrow_provider.dart';
-import '../../services/email_service.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/constants.dart';
 import '../../utils/validators.dart';
@@ -36,9 +35,6 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
   DateTime _borrowedAt = DateTime.now();
   DateTime _dueDate = DateTime.now().add(const Duration(days: 7));
   bool _saving = false;
-  bool _emailVerified = false;
-  String? _pendingCode;
-  bool _sendingCode = false;
 
   @override
   void dispose() {
@@ -107,58 +103,22 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) {
-                        if (_emailVerified || _pendingCode != null) {
-                          setState(() {
-                            _emailVerified = false;
-                            _pendingCode = null;
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Student email',
-                        prefixIcon: const Icon(Icons.mail_outline_rounded),
-                        suffixIcon: _emailVerified
-                            ? const Icon(
-                                Icons.verified_rounded,
-                                color: AppColors.signalGreen,
-                              )
-                            : null,
+                        hintText: 'student@gmail.com',
+                        prefixIcon: Icon(Icons.mail_outline_rounded),
                       ),
                       validator: Validators.email,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _emailVerified
-                          ? 'Email verified — student can receive due reminders.'
-                          : 'Verify email to enable 1-day-before return reminders.',
+                      'The library Gmail account (More → Email reminders) will '
+                      'send a borrow receipt now and a return reminder 1 day '
+                      'before the due date.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: _emailVerified
-                                ? AppColors.signalGreen
-                                : AppColors.labelMuted,
+                            color: AppColors.labelMuted,
+                            height: 1.4,
                           ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: _sendingCode || _emailVerified
-                                ? null
-                                : _startVerification,
-                            icon: _sendingCode
-                                ? const SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  )
-                                : const Icon(Icons.mark_email_read_outlined),
-                            label: Text(
-                              _emailVerified ? 'Verified' : 'Verify email',
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                     const SizedBox(height: 14),
                     Text(
@@ -304,91 +264,6 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
     );
   }
 
-  Future<void> _startVerification() async {
-    final emailError = Validators.email(_email.text);
-    final nameError = Validators.displayName(_fullName.text);
-    if (emailError != null || nameError != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(emailError ?? nameError!)),
-      );
-      return;
-    }
-
-    setState(() => _sendingCode = true);
-    final code = EmailService.instance.generateVerificationCode();
-    var emailed = false;
-    String? sendError;
-    try {
-      await EmailService.instance.sendVerificationCode(
-        toEmail: _email.text,
-        studentName: _fullName.text.trim(),
-        code: code,
-      );
-      emailed = true;
-    } catch (e) {
-      sendError = e.toString().replaceFirst('Exception: ', '');
-    }
-    if (!mounted) return;
-    setState(() {
-      _sendingCode = false;
-      _pendingCode = code;
-    });
-
-    final entered = await showDialog<String>(
-      context: context,
-      builder: (context) {
-        final controller = TextEditingController();
-        return AlertDialog(
-          title: const Text('Verify student email'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                emailed
-                    ? 'A verification code was emailed to ${_email.text.trim()}.'
-                    : 'Could not email the code'
-                        '${sendError != null ? ': $sendError' : '.'}\n\n'
-                        'On-device code for the student/librarian to confirm:\n$code',
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: controller,
-                keyboardType: TextInputType.number,
-                maxLength: 6,
-                decoration: const InputDecoration(
-                  labelText: 'Enter 6-digit code',
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: const Text('Confirm'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (!mounted) return;
-    if (entered != null && entered == _pendingCode) {
-      setState(() => _emailVerified = true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Student email verified')),
-      );
-    } else if (entered != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Incorrect verification code')),
-      );
-    }
-  }
-
   Future<void> _pickBorrowed() async {
     final picked = await showDatePicker(
       context: context,
@@ -426,12 +301,12 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
         _program == 'Other' ? _programOther.text.trim() : _program!;
 
     setState(() => _saving = true);
-    final ok = await context.read<BorrowProvider>().createLoan(
+    final provider = context.read<BorrowProvider>();
+    final ok = await provider.createLoan(
           book: _book!,
           studentFullName: _fullName.text,
           studentId: _studentId.text,
           studentEmail: _email.text,
-          emailVerified: _emailVerified,
           studentLevel: _level,
           program: programValue,
           yearLevel: _yearLevel!,
@@ -442,12 +317,14 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
     setState(() => _saving = false);
 
     if (ok) {
+      final mailNote = provider.error;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            _emailVerified
-                ? 'Borrow saved. Email reminders enabled for this student.'
-                : 'Borrow saved. Email not verified — librarian alerts only.',
+            mailNote != null && mailNote.startsWith('Borrow saved')
+                ? mailNote
+                : 'Borrow saved. A receipt was emailed to the student '
+                    '(if library Gmail is configured).',
           ),
         ),
       );
@@ -456,8 +333,7 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.read<BorrowProvider>().error ??
-                'Could not save borrow record',
+            provider.error ?? 'Could not save borrow record',
           ),
         ),
       );

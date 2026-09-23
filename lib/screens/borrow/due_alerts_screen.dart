@@ -76,7 +76,7 @@ class DueAlertsScreen extends StatelessWidget {
                             recordName: r.studentFullName,
                             detail:
                                 '${r.bookName}\nDue ${dateFormat.format(r.dueDate)}'
-                                '${r.emailVerified ? ' · verified email' : ' · email not verified'}',
+                                '${r.studentEmail.isEmpty ? '' : ' · ${r.studentEmail}'}',
                             status: SignalStatus.amber,
                           ),
                         ),

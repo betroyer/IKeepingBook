@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
       return EmptyState(
         title: 'No books yet',
         message:
-            'Your library is empty. Add the first title to start this shelf.',
+            'Add your first title to begin managing this library.',
         actionLabel: 'Add book',
         onAction: () => _openAdd(context),
       );
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
             TextButton.icon(
               onPressed: () => _openAdd(context),
               icon: const Icon(Icons.add_rounded),
-              label: const Text('Quick add'),
+              label: const Text('Add'),
             ),
           ],
         ),
@@ -59,14 +59,15 @@ class HomeScreen extends StatelessWidget {
                   GlassCard(
                     padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
                     borderColor:
-                        AppColors.purpleSecondary.withValues(alpha: 0.45),
+                        AppColors.caseIndigo.withValues(alpha: 0.35),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
-                            'Sample library loaded for first launch — replace these titles with your own books.',
+                            'Sample titles are loaded for first launch. Replace them with your own inventory.',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: AppColors.labelMuted,
+                              height: 1.4,
                             ),
                           ),
                         ),
@@ -78,10 +79,10 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                 ],
                 Text(
-                  'Library vitals',
+                  'Overview',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -91,12 +92,12 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
           sliver: SliverGrid.count(
             crossAxisCount: 2,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 1.35,
+            childAspectRatio: 1.28,
             children: [
               StatisticCard(
                 label: 'Titles',

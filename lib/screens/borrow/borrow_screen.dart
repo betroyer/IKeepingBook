@@ -137,7 +137,7 @@ class _BorrowScreenState extends State<BorrowScreen> {
                 ? EmptyState(
                     title: 'No borrow records',
                     message:
-                        'Record a student loan with name, ID, verified email, '
+                        'Record a student loan with name, ID, email, '
                         'course/strand & year, and dates.',
                     actionLabel: 'New borrow',
                     onAction: () => _openNewBorrow(context),
@@ -245,7 +245,7 @@ class _BorrowCard extends StatelessWidget {
       status = SignalStatus.green;
       statusLabel = 'Returned';
     } else if (record.isOverdue) {
-      status = SignalStatus.amber;
+      status = SignalStatus.red;
       statusLabel = 'Overdue';
     } else if (record.isDueSoon) {
       status = SignalStatus.amber;
@@ -293,6 +293,12 @@ class _BorrowCard extends StatelessWidget {
           ),
           Row(
             children: [
+              Icon(
+                Icons.mail_outline_rounded,
+                size: 14,
+                color: AppColors.labelMuted.withValues(alpha: 0.9),
+              ),
+              const SizedBox(width: 6),
               Expanded(
                 child: Text(
                   record.studentEmail.isEmpty
@@ -303,12 +309,6 @@ class _BorrowCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (record.emailVerified)
-                const Icon(
-                  Icons.verified_rounded,
-                  size: 16,
-                  color: AppColors.signalGreen,
-                ),
             ],
           ),
           Text(

@@ -3,28 +3,26 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Warm library — dusty rose, cream, and wood from brand logo
-  static const caseDeep = Color(0xFF2C1810);
-  static const caseIndigo = Color(0xFF7A3F4A); // rosewood primary
-  static const caseMist = Color(0xFFE8D5C8); // dusty rose mist
-  static const caseGlassFill = Color(0x99FFF8F0); // cream glass
-  static const caseGlassFillDark = Color(0x667A3F4A);
-  static const metalEdge = Color(0xFFC4A894); // soft taupe / rose-gold edge
-  static const purpleSecondary = Color(0xFFD4899A); // pastel pink
+  // Warm library — refined rosewood / cream from brand logo
+  static const caseDeep = Color(0xFF241510);
+  static const caseIndigo = Color(0xFF6B3842); // rosewood primary
+  static const caseMist = Color(0xFFE6D4C8);
+  static const caseGlassFill = Color(0xB8FFF9F4); // cream glass, clearer
+  static const caseGlassFillDark = Color(0x806B3842);
+  static const metalEdge = Color(0xFFB89A88);
+  static const purpleSecondary = Color(0xFFB8798A); // muted dusty rose
   static const labelInk = Color(0xFF1A1410);
-  static const labelMuted = Color(0xFF6B5A52);
-  static const onDark = Color(0xFFFFF8F0);
+  static const labelMuted = Color(0xFF5C4D46);
+  static const onDark = Color(0xFFFFF9F4);
 
-  // Soft ambient washes (background)
-  static const creamWash = Color(0xFFFFF5EE);
-  static const peachWash = Color(0xFFF0D9CC);
-  static const roseWash = Color(0xFFE8C4B8);
-  static const mintAccent = Color(0xFFC5D9C8); // logo center mint
+  static const creamWash = Color(0xFFFFF8F3);
+  static const peachWash = Color(0xFFF3E2D6);
+  static const roseWash = Color(0xFFE5C9BC);
+  static const mintAccent = Color(0xFFBCCDC0);
 
-  // Signal lamps (status only)
-  static const signalGreen = Color(0xFF16A34A);
-  static const signalAmber = Color(0xFFD97706);
-  static const signalRed = Color(0xFFDC2626);
+  static const signalGreen = Color(0xFF15803D);
+  static const signalAmber = Color(0xFFB45309);
+  static const signalRed = Color(0xFFB91C1C);
 
   static const lowStockThreshold = 5;
 }

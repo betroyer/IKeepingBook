@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
-/// Frosted pane — rare-book case glass, not decorative blur chrome.
+/// Frosted cream pane — library glass, restrained for professional use.
 class GlassCard extends StatelessWidget {
   const GlassCard({
     super.key,
@@ -12,7 +12,7 @@ class GlassCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(16),
     this.onTap,
     this.borderColor,
-    this.radius = 18,
+    this.radius = 16,
     this.elevated = false,
   });
 
@@ -21,37 +21,40 @@ class GlassCard extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? borderColor;
   final double radius;
-  /// When true, soft shadow only (no border). Default: metal-edge border only.
   final bool elevated;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final fill = isDark ? AppColors.caseGlassFillDark : AppColors.caseGlassFill;
-    final edge = borderColor ?? AppColors.metalEdge.withValues(alpha: 0.55);
+    final edge = borderColor ?? AppColors.metalEdge.withValues(alpha: 0.48);
 
     final pane = ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: Material(
           color: Colors.transparent,
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: fill,
               borderRadius: BorderRadius.circular(radius),
-              border: elevated
-                  ? null
-                  : Border.all(color: edge, width: 1),
+              border: elevated ? null : Border.all(color: edge, width: 1),
               boxShadow: elevated
                   ? [
                       BoxShadow(
-                        color: AppColors.caseDeep.withValues(alpha: 0.14),
-                        blurRadius: 18,
-                        offset: const Offset(0, 8),
+                        color: AppColors.caseDeep.withValues(alpha: 0.12),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
                       ),
                     ]
-                  : null,
+                  : [
+                      BoxShadow(
+                        color: AppColors.caseDeep.withValues(alpha: 0.04),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
             ),
             child: Padding(padding: padding, child: child),
           ),

@@ -40,10 +40,10 @@ Confirmed:
 - Dark mode toggle in Settings
 - Local Log in / Sign up (accounts stored on device in SQLite; session via SharedPreferences)
 - Log out from More
-- Student borrow records: full name, student ID, verified email, college (course & year) or high school (strand & year), borrow date, return due date; mark returned; stock decreases/increases with loan/return
+- Student borrow records: full name, student ID, email, college (course & year) or high school (strand & year), borrow date, return due date; mark returned; stock decreases/increases with loan/return
 - Librarian due-soon / overdue in-app alerts and device notifications (1 day before due)
-- Optional student email reminder 1 day before due (requires SMTP in More → Email reminders + verified student email)
-- No cloud backend; email sending needs network + SMTP when enabled
+- Student emails from library Gmail: borrow receipt on loan + return reminder 1 day before due (More → Email reminders; requires a real Gmail + App Password)
+- No cloud backend; email sending needs network when Gmail is enabled
 
 Undecided / out of scope for v1:
 - Custom user-defined categories beyond the five
@@ -55,10 +55,10 @@ Undecided / out of scope for v1:
 
 - Name: **I-Keeping Books**
 - Mark: circular “Only Hope / I-Keeping Books” logo (`assets/branding/logo.png`) — books + mug badge on a warm library background
-- Visual direction: Glassmorphism over a cozy library wash — cream frosted panes, soft rosewood primary, pastel pink secondary, dusty-rose / peach backgrounds drawn from the logo
-- Color direction from logo: cream `#FFF5EE`, peach `#F0D9CC`, dusty rose `#E8C4B8` / `#E8D5C8`, rosewood primary `#7A3F4A`, pastel pink `#D4899A`, taupe edge `#C4A894`, near-black ink; green / amber / red for stock signals only
+- Visual direction: Glassmorphism over a warm library wash — cream frosted panes, rosewood primary, muted dusty-rose secondary, dusty-rose / peach backgrounds drawn from the logo
+- Color direction from logo: cream `#FFF8F3`, peach `#F3E2D6`, dusty rose `#E5C9BC` / `#E6D4C8`, rosewood primary `#6B3842`, muted dusty-rose secondary `#B8798A`, taupe edge `#B89A88`, near-black ink; green / amber / red for stock signals only
 - Typography: Poppins; Material type roles preferred for Android
-- Feel: warm personal reading-nook library, not a cool indigo admin tool or bare CRUD shell
+- Feel: warm professional library inventory — cozy brand light with restrained glass chrome, not a pastel lifestyle shell or cool indigo admin tool
 
 ## Evidence on Hand
 

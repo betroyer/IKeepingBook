@@ -88,7 +88,7 @@ class _BooksScreenState extends State<BooksScreen> {
                         ? 'No books yet'
                         : 'No books found',
                     message: provider.searchQuery.isEmpty
-                        ? 'Add a title to place it in the case.'
+                        ? 'Add a title to build your inventory.'
                         : 'Try another name, or clear the search.',
                     actionLabel: provider.searchQuery.isEmpty
                         ? 'Add book'

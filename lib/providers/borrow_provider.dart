@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 import '../models/book.dart';
 import '../models/borrow_record.dart';
 import '../services/borrow_service.dart';
+import '../services/email_service.dart';
 import '../services/notification_service.dart';
 import '../services/reminder_service.dart';
 
@@ -97,20 +99,20 @@ class BorrowProvider extends ChangeNotifier {
     required String studentFullName,
     required String studentId,
     required String studentEmail,
-    required bool emailVerified,
     required StudentLevel studentLevel,
     required String program,
     required String yearLevel,
     required DateTime borrowedAt,
     required DateTime dueDate,
   }) async {
+    _error = null;
     try {
       final record = await _service.createLoan(
         book: book,
         studentFullName: studentFullName,
         studentId: studentId,
         studentEmail: studentEmail,
-        emailVerified: emailVerified,
+        emailVerified: true,
         studentLevel: studentLevel,
         program: program,
         yearLevel: yearLevel,
@@ -120,6 +122,25 @@ class BorrowProvider extends ChangeNotifier {
       _records = [record, ..._records];
       notifyListeners();
       await NotificationService.instance.scheduleLoanReminder(record);
+
+      final email = studentEmail.trim();
+      if (email.isNotEmpty) {
+        try {
+          final fmt = DateFormat.yMMMd();
+          await EmailService.instance.sendBorrowConfirmation(
+            toEmail: email,
+            studentName: studentFullName.trim(),
+            bookName: book.name,
+            borrowedLabel: fmt.format(borrowedAt),
+            dueDateLabel: fmt.format(dueDate),
+          );
+        } catch (e) {
+          _error =
+              'Borrow saved, but could not email the student: '
+              '${e.toString().replaceFirst('Exception: ', '')}';
+          notifyListeners();
+        }
+      }
       return true;
     } catch (e) {
       _error = e.toString().replaceFirst('Exception: ', '');

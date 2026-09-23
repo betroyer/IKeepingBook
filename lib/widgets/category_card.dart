@@ -29,9 +29,9 @@ class CategoryCard extends StatelessWidget {
             height: 48,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: AppColors.purpleSecondary.withValues(alpha: 0.18),
+              color: AppColors.caseIndigo.withValues(alpha: 0.10),
               border: Border.all(
-                color: AppColors.metalEdge.withValues(alpha: 0.45),
+                color: AppColors.metalEdge.withValues(alpha: 0.4),
               ),
             ),
             child: Icon(icon, color: AppColors.caseIndigo),

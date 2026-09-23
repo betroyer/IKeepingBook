@@ -2,25 +2,25 @@
 name: I-Keeping Books
 description: Warm coquette library — dusty rose light, cream glass panes, and the circular brand logo.
 colors:
-  case-indigo: "#7A3F4A"
-  case-deep: "#2C1810"
-  case-mist: "#E8D5C8"
-  case-glass: "#FFF8F0"
-  case-glass-fill: "#99FFF8F0"
-  case-glass-fill-dark: "#667A3F4A"
-  purple-secondary: "#D4899A"
-  metal-edge: "#C4A894"
+  case-indigo: "#6B3842"
+  case-deep: "#241510"
+  case-mist: "#E6D4C8"
+  case-glass: "#FFF9F4"
+  case-glass-fill: "#B8FFF9F4"
+  case-glass-fill-dark: "#806B3842"
+  purple-secondary: "#B8798A"
+  metal-edge: "#B89A88"
   label-ink: "#1A1410"
-  label-muted: "#6B5A52"
-  on-dark: "#FFF8F0"
-  cream-wash: "#FFF5EE"
-  peach-wash: "#F0D9CC"
-  rose-wash: "#E8C4B8"
-  mint-accent: "#C5D9C8"
-  dialog-surface: "#FFF8F0"
-  signal-green: "#16A34A"
-  signal-amber: "#D97706"
-  signal-red: "#DC2626"
+  label-muted: "#5C4D46"
+  on-dark: "#FFF9F4"
+  cream-wash: "#FFF8F3"
+  peach-wash: "#F3E2D6"
+  rose-wash: "#E5C9BC"
+  mint-accent: "#BCCDC0"
+  dialog-surface: "#FFF9F4"
+  signal-green: "#15803D"
+  signal-amber: "#B45309"
+  signal-red: "#B91C1C"
 typography:
   display:
     fontFamily: "Poppins, sans-serif"
@@ -119,7 +119,7 @@ components:
 
 **Creative North Star: "Only Hope Library Nook"**
 
-The interface borrows light from the circular brand logo: warm dusty-rose library glow, cream frosted panes, rosewood primary fills, and soft pastel-pink accents. Glassmorphism stays, but the gallery shifts from cool indigo to a cozy coquette reading nook — soft peach washes, taupe metal edges, and mint secondary glow from the logo’s center badge.
+The interface borrows light from the circular brand logo: warm dusty-rose library glow, cream frosted panes, rosewood primary fills, and muted dusty-rose accents. Glassmorphism stays restrained — quieter ambient glows, clearer cream panes, and Material 3 controls tuned for librarian work rather than decorative coquette chrome.
 
 Density stays calm and labeled. Home, Books, Borrow, and More keep Material 3 structure; brand lives in the warm wash, cream panes, rosewood FAB/buttons, and the circular logo on splash and login.
 
