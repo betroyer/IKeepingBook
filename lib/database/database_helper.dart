@@ -24,7 +24,7 @@ class DatabaseHelper {
     final path = p.join(dbPath, AppConstants.dbName);
     return openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await _createBooks(db);
         await _createUsers(db);
@@ -36,6 +36,9 @@ class DatabaseHelper {
         }
         if (oldVersion < 3) {
           await _createBorrows(db);
+        }
+        if (oldVersion < 4) {
+          await _upgradeBorrowsToV4(db);
         }
       },
     );
@@ -75,15 +78,42 @@ class DatabaseHelper {
         book_name TEXT NOT NULL,
         student_full_name TEXT NOT NULL,
         student_id TEXT NOT NULL,
+        student_email TEXT NOT NULL DEFAULT '',
+        email_verified INTEGER NOT NULL DEFAULT 0,
         student_level TEXT NOT NULL,
         program TEXT NOT NULL,
         year_level TEXT NOT NULL,
         borrowed_at TEXT NOT NULL,
         due_date TEXT NOT NULL,
         returned_at TEXT,
+        reminder_sent INTEGER NOT NULL DEFAULT 0,
         FOREIGN KEY (book_id) REFERENCES books (id)
       )
     ''');
+  }
+
+  Future<void> _upgradeBorrowsToV4(Database db) async {
+    final info = await db.rawQuery('PRAGMA table_info(borrows)');
+    final names = info.map((r) => r['name'] as String).toSet();
+    if (names.isEmpty) {
+      await _createBorrows(db);
+      return;
+    }
+    if (!names.contains('student_email')) {
+      await db.execute(
+        "ALTER TABLE borrows ADD COLUMN student_email TEXT NOT NULL DEFAULT ''",
+      );
+    }
+    if (!names.contains('email_verified')) {
+      await db.execute(
+        'ALTER TABLE borrows ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+    if (!names.contains('reminder_sent')) {
+      await db.execute(
+        'ALTER TABLE borrows ADD COLUMN reminder_sent INTEGER NOT NULL DEFAULT 0',
+      );
+    }
   }
 
   Future<int> insertBook(Book book) async {
@@ -224,6 +254,8 @@ class DatabaseHelper {
     required Book book,
     required String studentFullName,
     required String studentId,
+    required String studentEmail,
+    required bool emailVerified,
     required StudentLevel studentLevel,
     required String program,
     required String yearLevel,
@@ -254,6 +286,8 @@ class DatabaseHelper {
         bookName: current.name,
         studentFullName: studentFullName.trim(),
         studentId: studentId.trim(),
+        studentEmail: studentEmail.trim().toLowerCase(),
+        emailVerified: emailVerified,
         studentLevel: studentLevel,
         program: program.trim(),
         yearLevel: yearLevel.trim(),
@@ -274,6 +308,16 @@ class DatabaseHelper {
       );
       return record.copyWith(id: id);
     });
+  }
+
+  Future<void> markReminderSent(int borrowId) async {
+    final db = await database;
+    await db.update(
+      'borrows',
+      {'reminder_sent': 1},
+      where: 'id = ?',
+      whereArgs: [borrowId],
+    );
   }
 
   Future<BorrowRecord> returnBorrow(BorrowRecord record) async {

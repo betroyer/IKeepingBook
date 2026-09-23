@@ -7,10 +7,12 @@ import 'providers/book_provider.dart';
 import 'providers/borrow_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/splash/splash_screen.dart';
+import 'services/notification_service.dart';
 import 'theme/app_theme.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.instance.init();
   runApp(const IKeepingBooksApp());
 }
 

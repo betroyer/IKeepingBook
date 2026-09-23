@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import '../models/book.dart';
 import '../models/borrow_record.dart';
 import '../services/borrow_service.dart';
+import '../services/notification_service.dart';
+import '../services/reminder_service.dart';
 
-enum BorrowFilter { active, returned, all }
+enum BorrowFilter { active, dueSoon, returned, all }
 
 class BorrowProvider extends ChangeNotifier {
   BorrowProvider({BorrowService? service})
@@ -26,12 +28,18 @@ class BorrowProvider extends ChangeNotifier {
 
   int get activeCount => _records.where((r) => !r.isReturned).length;
   int get overdueCount => _records.where((r) => r.isOverdue).length;
+  int get dueSoonCount => _records.where((r) => r.isDueSoon).length;
+
+  List<BorrowRecord> get dueSoonRecords =>
+      _records.where((r) => r.isDueSoon).toList();
 
   List<BorrowRecord> get visibleRecords {
     Iterable<BorrowRecord> list = _records;
     switch (_filter) {
       case BorrowFilter.active:
         list = list.where((r) => !r.isReturned);
+      case BorrowFilter.dueSoon:
+        list = list.where((r) => r.isDueSoon);
       case BorrowFilter.returned:
         list = list.where((r) => r.isReturned);
       case BorrowFilter.all:
@@ -43,7 +51,8 @@ class BorrowProvider extends ChangeNotifier {
         (r) =>
             r.studentFullName.toLowerCase().contains(q) ||
             r.studentId.toLowerCase().contains(q) ||
-            r.bookName.toLowerCase().contains(q),
+            r.bookName.toLowerCase().contains(q) ||
+            r.studentEmail.toLowerCase().contains(q),
       );
     }
     final result = list.toList()
@@ -65,6 +74,14 @@ class BorrowProvider extends ChangeNotifier {
     }
   }
 
+  Future<ReminderRunResult> runReminders() async {
+    final result = await ReminderService.instance.runDueSoonPass(_records);
+    if (result.emailsSent > 0) {
+      await load();
+    }
+    return result;
+  }
+
   void setSearch(String query) {
     _searchQuery = query;
     notifyListeners();
@@ -79,6 +96,8 @@ class BorrowProvider extends ChangeNotifier {
     required Book book,
     required String studentFullName,
     required String studentId,
+    required String studentEmail,
+    required bool emailVerified,
     required StudentLevel studentLevel,
     required String program,
     required String yearLevel,
@@ -90,6 +109,8 @@ class BorrowProvider extends ChangeNotifier {
         book: book,
         studentFullName: studentFullName,
         studentId: studentId,
+        studentEmail: studentEmail,
+        emailVerified: emailVerified,
         studentLevel: studentLevel,
         program: program,
         yearLevel: yearLevel,
@@ -98,6 +119,7 @@ class BorrowProvider extends ChangeNotifier {
       );
       _records = [record, ..._records];
       notifyListeners();
+      await NotificationService.instance.scheduleLoanReminder(record);
       return true;
     } catch (e) {
       _error = e.toString().replaceFirst('Exception: ', '');
@@ -113,6 +135,9 @@ class BorrowProvider extends ChangeNotifier {
           .map((r) => r.id == updated.id ? updated : r)
           .toList();
       notifyListeners();
+      if (record.id != null) {
+        await NotificationService.instance.cancelLoanReminder(record.id!);
+      }
       return true;
     } catch (e) {
       _error = e.toString().replaceFirst('Exception: ', '');

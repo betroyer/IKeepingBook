@@ -11,6 +11,7 @@ import '../../widgets/custom_search_bar.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/signal_lamp.dart';
+import 'due_alerts_screen.dart';
 import 'new_borrow_screen.dart';
 
 class BorrowScreen extends StatefulWidget {
@@ -23,6 +24,15 @@ class BorrowScreen extends StatefulWidget {
 class _BorrowScreenState extends State<BorrowScreen> {
   final _search = TextEditingController();
   final _dateFormat = DateFormat.yMMMd();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      await context.read<BorrowProvider>().runReminders();
+    });
+  }
 
   @override
   void dispose() {
@@ -49,19 +59,21 @@ class _BorrowScreenState extends State<BorrowScreen> {
             pinned: true,
             title: const Text('Borrow'),
             actions: [
-              if (provider.overdueCount > 0)
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Center(
-                    child: Text(
-                      '${provider.overdueCount} overdue',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: AppColors.signalAmber,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+              IconButton(
+                tooltip: 'Due-soon alerts',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    casePaneRoute(const DueAlertsScreen()),
+                  );
+                },
+                icon: Badge(
+                  isLabelVisible: provider.dueSoonCount + provider.overdueCount > 0,
+                  label: Text(
+                    '${provider.dueSoonCount + provider.overdueCount}',
                   ),
+                  child: const Icon(Icons.notifications_outlined),
                 ),
+              ),
             ],
           ),
           SliverToBoxAdapter(
@@ -69,29 +81,50 @@ class _BorrowScreenState extends State<BorrowScreen> {
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               child: Column(
                 children: [
+                  if (provider.dueSoonCount > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: GlassCard(
+                        onTap: () =>
+                            provider.setFilter(BorrowFilter.dueSoon),
+                        borderColor:
+                            AppColors.signalAmber.withValues(alpha: 0.55),
+                        child: Row(
+                          children: [
+                            const SignalLamp(status: SignalStatus.amber),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                '${provider.dueSoonCount} student'
+                                '${provider.dueSoonCount == 1 ? '' : 's'} '
+                                'due tomorrow',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right_rounded),
+                          ],
+                        ),
+                      ),
+                    ),
                   CustomSearchBar(
                     controller: _search,
-                    hint: 'Search student, ID, or book',
+                    hint: 'Search student, ID, email, or book',
                     onChanged: provider.setSearch,
                   ),
                   const SizedBox(height: 10),
-                  SegmentedButton<BorrowFilter>(
-                    segments: const [
-                      ButtonSegment(
-                        value: BorrowFilter.active,
-                        label: Text('Active'),
-                      ),
-                      ButtonSegment(
-                        value: BorrowFilter.returned,
-                        label: Text('Returned'),
-                      ),
-                      ButtonSegment(
-                        value: BorrowFilter.all,
-                        label: Text('All'),
-                      ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final f in BorrowFilter.values)
+                        FilterChip(
+                          label: Text(_filterLabel(f, provider)),
+                          selected: provider.filter == f,
+                          onSelected: (_) => provider.setFilter(f),
+                        ),
                     ],
-                    selected: {provider.filter},
-                    onSelectionChanged: (s) => provider.setFilter(s.first),
                   ),
                 ],
               ),
@@ -104,7 +137,8 @@ class _BorrowScreenState extends State<BorrowScreen> {
                 ? EmptyState(
                     title: 'No borrow records',
                     message:
-                        'Record a student loan with name, student ID, course/strand & year, and dates.',
+                        'Record a student loan with name, ID, verified email, '
+                        'course/strand & year, and dates.',
                     actionLabel: 'New borrow',
                     onAction: () => _openNewBorrow(context),
                     icon: Icons.assignment_outlined,
@@ -128,6 +162,13 @@ class _BorrowScreenState extends State<BorrowScreen> {
       ),
     );
   }
+
+  String _filterLabel(BorrowFilter f, BorrowProvider p) => switch (f) {
+        BorrowFilter.active => 'Active (${p.activeCount})',
+        BorrowFilter.dueSoon => 'Due soon (${p.dueSoonCount})',
+        BorrowFilter.returned => 'Returned',
+        BorrowFilter.all => 'All',
+      };
 
   Future<void> _openNewBorrow(BuildContext context) async {
     final ok = await Navigator.of(context).push<bool>(
@@ -198,12 +239,21 @@ class _BorrowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final status = record.isReturned
-        ? SignalStatus.green
-        : (record.isOverdue ? SignalStatus.amber : SignalStatus.green);
-    final statusLabel = record.isReturned
-        ? 'Returned'
-        : (record.isOverdue ? 'Overdue' : 'On loan');
+    final SignalStatus status;
+    final String statusLabel;
+    if (record.isReturned) {
+      status = SignalStatus.green;
+      statusLabel = 'Returned';
+    } else if (record.isOverdue) {
+      status = SignalStatus.amber;
+      statusLabel = 'Overdue';
+    } else if (record.isDueSoon) {
+      status = SignalStatus.amber;
+      statusLabel = 'Due tomorrow';
+    } else {
+      status = SignalStatus.green;
+      statusLabel = 'On loan';
+    }
 
     return GlassCard(
       child: Column(
@@ -240,6 +290,26 @@ class _BorrowCard extends StatelessWidget {
             style: theme.textTheme.bodySmall?.copyWith(
               color: AppColors.labelMuted,
             ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  record.studentEmail.isEmpty
+                      ? 'No email'
+                      : record.studentEmail,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.labelMuted,
+                  ),
+                ),
+              ),
+              if (record.emailVerified)
+                const Icon(
+                  Icons.verified_rounded,
+                  size: 16,
+                  color: AppColors.signalGreen,
+                ),
+            ],
           ),
           Text(
             '${record.studentLevel.label} · ${record.programSummary}',
