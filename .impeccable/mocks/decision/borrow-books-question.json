@@ -1,0 +1,68 @@
+{
+  "title": "Borrow books selection",
+  "question": "When a librarian records a student borrow, how should book selection work?",
+  "followup": false,
+  "buildPath": { "value": "code", "toggle": true },
+  "options": [
+    {
+      "id": "multi-checklist",
+      "label": "Select multiple books at once",
+      "kicker": "RECOMMENDED",
+      "thesis": "One student form, then a searchable checklist of in-stock titles — tap several books before saving.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A", "#E5C9BC"],
+      "materials": ["cream glass pane", "Material checklist"],
+      "viewport": "New Borrow: student fields, then Books borrowed with checkboxes and available counts; Save creates one loan line per book.",
+      "risk": "List can feel long if the catalog is large — search and in-stock-only filter keep it usable.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 14,
+        "regions": [
+          {"label": "app bar", "x": 0, "y": 0, "w": 12, "h": 1, "accent": true},
+          {"label": "student info", "x": 1, "y": 1, "w": 10, "h": 4},
+          {"label": "books checklist + search", "x": 1, "y": 5, "w": 10, "h": 6, "accent": true},
+          {"label": "dates", "x": 1, "y": 11, "w": 10, "h": 2},
+          {"label": "save borrow", "x": 2, "y": 13, "w": 8, "h": 1, "accent": true}
+        ]
+      }
+    },
+    {
+      "id": "multi-picker-sheet",
+      "label": "Add books via bottom sheet",
+      "thesis": "Keep the form compact — tap Add books, pick from a searchable sheet, see selected chips on the form.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A", "#E5C9BC"],
+      "materials": ["Material bottom sheet", "filter chips"],
+      "viewport": "Selected book chips under Book & dates; sheet lists titles with stock; same due date for the batch.",
+      "risk": "One extra step vs an always-visible checklist.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 14,
+        "regions": [
+          {"label": "app bar", "x": 0, "y": 0, "w": 12, "h": 1},
+          {"label": "student info", "x": 1, "y": 1, "w": 10, "h": 5},
+          {"label": "selected chips + Add books", "x": 1, "y": 6, "w": 10, "h": 3, "accent": true},
+          {"label": "dates + save", "x": 1, "y": 9, "w": 10, "h": 3},
+          {"label": "bottom sheet picker", "x": 0, "y": 10, "w": 12, "h": 4, "accent": true}
+        ]
+      }
+    },
+    {
+      "id": "single-improved",
+      "label": "Keep one book per borrow",
+      "thesis": "Improve the existing single-book dropdown with search — librarian still loans one title at a time.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A", "#E5C9BC"],
+      "materials": ["searchable dropdown"],
+      "viewport": "Same New Borrow form; book field becomes searchable Autocomplete of in-stock titles.",
+      "risk": "Does not match “books” plural if students commonly take several titles.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 12,
+        "regions": [
+          {"label": "app bar", "x": 0, "y": 0, "w": 12, "h": 1},
+          {"label": "student info", "x": 1, "y": 1, "w": 10, "h": 5},
+          {"label": "searchable book field", "x": 1, "y": 6, "w": 10, "h": 2, "accent": true},
+          {"label": "dates + save", "x": 1, "y": 8, "w": 10, "h": 3}
+        ]
+      }
+    }
+  ]
+}

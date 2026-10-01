@@ -1,0 +1,44 @@
+{
+  "title": "What database should we add?",
+  "question": "The app already uses on-device SQLite. What does your teacher want?",
+  "followup": false,
+  "buildPath": { "value": "code", "toggle": false },
+  "options": [
+    {
+      "id": "document-sqlite",
+      "label": "Document the existing SQLite DB",
+      "thesis": "Keep local SQLite; add schema docs, ERD, and maybe sample SQL for the class report.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A"],
+      "materials": ["SQLite", "ERD"],
+      "viewport": "No app rewrite — schema diagram and table docs for books, users, borrows.",
+      "risk": "Teacher may want a server DB instead of documentation only."
+    },
+    {
+      "id": "mysql-php",
+      "label": "MySQL / MariaDB (school server)",
+      "thesis": "Move or sync library data to a MySQL database with a small API (common school setup).",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A"],
+      "materials": ["MySQL", "REST API"],
+      "viewport": "App talks to a backend; login and books live in MySQL.",
+      "risk": "Needs hosting, network, and more setup than local SQLite."
+    },
+    {
+      "id": "firebase",
+      "label": "Firebase / cloud database",
+      "thesis": "Use Firebase Auth + Firestore (or similar) so data syncs online.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A"],
+      "materials": ["Firebase", "cloud"],
+      "viewport": "Accounts and loans in the cloud; works across devices when online.",
+      "risk": "Changes offline-first product positioning; needs Google project setup."
+    },
+    {
+      "id": "unsure",
+      "label": "Not sure — show me options for class",
+      "thesis": "Explain what we already have and a short recommendation for a school project.",
+      "palette": ["#6B3842", "#FFF8F3", "#B8798A"],
+      "materials": ["advice"],
+      "viewport": "Chat summary comparing SQLite vs MySQL vs Firebase for this app.",
+      "risk": "We wait on a clear pick before coding."
+    }
+  ]
+}

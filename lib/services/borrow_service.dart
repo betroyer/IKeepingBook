@@ -1,0 +1,67 @@
+import '../database/database_helper.dart';
+import '../models/book.dart';
+import '../models/borrow_record.dart';
+
+class BorrowService {
+  BorrowService({DatabaseHelper? helper})
+      : _db = helper ?? DatabaseHelper.instance;
+
+  final DatabaseHelper _db;
+
+  Future<List<BorrowRecord>> fetchAll() => _db.getAllBorrows();
+
+  Future<BorrowRecord> createLoan({
+    required Book book,
+    required String studentFullName,
+    required String studentId,
+    required String studentEmail,
+    required bool emailVerified,
+    required StudentLevel studentLevel,
+    required String program,
+    required String yearLevel,
+    required DateTime borrowedAt,
+    required DateTime dueDate,
+  }) {
+    return _db.createBorrow(
+      book: book,
+      studentFullName: studentFullName,
+      studentId: studentId,
+      studentEmail: studentEmail,
+      emailVerified: emailVerified,
+      studentLevel: studentLevel,
+      program: program,
+      yearLevel: yearLevel,
+      borrowedAt: borrowedAt,
+      dueDate: dueDate,
+    );
+  }
+
+  Future<List<BorrowRecord>> createLoans({
+    required List<Book> books,
+    required String studentFullName,
+    required String studentId,
+    required String studentEmail,
+    required bool emailVerified,
+    required StudentLevel studentLevel,
+    required String program,
+    required String yearLevel,
+    required DateTime borrowedAt,
+    required DateTime dueDate,
+  }) {
+    return _db.createBorrows(
+      books: books,
+      studentFullName: studentFullName,
+      studentId: studentId,
+      studentEmail: studentEmail,
+      emailVerified: emailVerified,
+      studentLevel: studentLevel,
+      program: program,
+      yearLevel: yearLevel,
+      borrowedAt: borrowedAt,
+      dueDate: dueDate,
+    );
+  }
+
+  Future<BorrowRecord> markReturned(BorrowRecord record) =>
+      _db.returnBorrow(record);
+}

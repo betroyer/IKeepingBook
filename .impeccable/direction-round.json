@@ -1,0 +1,215 @@
+{
+  "title": "Choose the visual world",
+  "question": "The roll assigned Rare-Book Glass Case. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Rare-Book Glass Case",
+      "kicker": "THE ROLL",
+      "lineage": "museum rare-book vitrine under cool gallery light",
+      "thesis": "Your library lives behind lit glass: translucent panes, labeled specimens, indigo depth — not generic glassmorphism chrome.",
+      "palette": ["#1A2744", "#5B4B8A", "#C5D0EA", "#0B1220", "#E8EEF8"],
+      "materials": ["frosted glass panes", "gallery cool light", "thin metal shelf edges", "specimen label cards"],
+      "viewport": "Home opens as a lit case: four glass instrument tiles for library vitals, then a glass shelf of recently added labeled books; primary Add sits as a Material FAB.",
+      "risk": "Can collapse into generic purple glass UI if panes, labels, and gallery light are not literal.",
+      "raised": [
+        {
+          "from": "challenger-kraftwerk",
+          "raise": "Stock status is a signal lamp: green / amber / red only, never decorative accents."
+        },
+        {
+          "from": "challenger-busytown",
+          "raise": "Every book specimen carries an equal-clarity printed label: name, category, quantity."
+        },
+        {
+          "from": "challenger-cloud",
+          "raise": "Saturated color lives only at status fringes; the case body stays cool indigo glass."
+        }
+      ],
+      "wireframe": {
+        "cols": 12,
+        "rows": 16,
+        "regions": [
+          { "label": "app bar · I-Keeping Books", "x": 0, "y": 0, "w": 12, "h": 1 },
+          { "label": "total books", "x": 0, "y": 2, "w": 6, "h": 3, "accent": true },
+          { "label": "total copies", "x": 6, "y": 2, "w": 6, "h": 3, "accent": true },
+          { "label": "categories", "x": 0, "y": 5, "w": 6, "h": 3 },
+          { "label": "low stock", "x": 6, "y": 5, "w": 6, "h": 3 },
+          { "label": "recent shelf", "x": 0, "y": 9, "w": 12, "h": 5 },
+          { "label": "bottom nav", "x": 0, "y": 14, "w": 12, "h": 2, "accent": true }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/assigned.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "Call-Number Spine Wall",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "library spine labels and class color bands",
+      "thesis": "Inventory as a wall of call-number spines: category bands, quantity as shelf depth, find-by-scan.",
+      "palette": ["#1F2937", "#F8FAFC", "#2563EB", "#F59E0B", "#DC2626"],
+      "materials": ["printed spine labels", "cloth book edges", "shelf wood grain"],
+      "viewport": "Home as a cropped shelf: category color bands as columns, recent titles as spines; Books screen is the full spine wall with search as the finding rod.",
+      "risk": "Also the direction most book-inventory runs land on — familiar and effective.",
+      "wireframe": {
+        "cols": 12,
+        "rows": 16,
+        "regions": [
+          { "label": "search rod", "x": 0, "y": 0, "w": 12, "h": 2, "accent": true },
+          { "label": "spine column A", "x": 0, "y": 2, "w": 2, "h": 12 },
+          { "label": "spine column B", "x": 2, "y": 2, "w": 2, "h": 12, "accent": true },
+          { "label": "spine column C", "x": 4, "y": 2, "w": 2, "h": 12 },
+          { "label": "spine column D", "x": 6, "y": 2, "w": 2, "h": 12 },
+          { "label": "spine column E", "x": 8, "y": 2, "w": 4, "h": 12 },
+          { "label": "bottom nav", "x": 0, "y": 14, "w": 12, "h": 2 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/model-pick.webp"
+    },
+    {
+      "id": "challenger-miura",
+      "label": "Miura Inventory Packet",
+      "verdict": "competitive",
+      "lineage": "deployable Miura-fold orbit sheets",
+      "thesis": "Categories fold into a gold packet; one pull deploys the full crease-grid of your collection.",
+      "palette": ["#FAFAF7", "#C9A227", "#6B7280", "#111827", "#BFDBFE"],
+      "materials": ["matte white sheet", "gold foil packet", "scored mountain/valley creases"],
+      "viewport": "Home starts as a compact packet of totals; pull deploys parallelogram cells for each category and recent books along the crease grid.",
+      "case": "Strong audience ID with paper/books; loses on Operate clarity versus a glass-case dashboard of vitals.",
+      "risk": "Fold metaphor can obscure Material CRUD affordances if overplayed.",
+      "hero": ".impeccable/mocks/decision/qb-miura-hero.webp",
+      "board": ".impeccable/mocks/decision/qb-miura.webp",
+      "wireframe": {
+        "cols": 12,
+        "rows": 14,
+        "regions": [
+          { "label": "gold packet totals", "x": 2, "y": 0, "w": 8, "h": 3, "accent": true },
+          { "label": "crease cell", "x": 0, "y": 4, "w": 4, "h": 4 },
+          { "label": "crease cell", "x": 4, "y": 4, "w": 4, "h": 4 },
+          { "label": "crease cell", "x": 8, "y": 4, "w": 4, "h": 4 },
+          { "label": "deployed shelf", "x": 0, "y": 8, "w": 12, "h": 4 },
+          { "label": "bottom nav", "x": 0, "y": 12, "w": 12, "h": 2 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/challenger-miura.webp"
+    },
+    {
+      "id": "challenger-ikeda",
+      "label": "Datamatics Stock Field",
+      "verdict": "competitive",
+      "lineage": "Ryoji Ikeda datamatics barcode lattices",
+      "thesis": "Quantity as pure barcode density: black/white stock columns you scan and invert.",
+      "palette": ["#000000", "#FFFFFF"],
+      "materials": ["pixel-crisp bars", "monospace numerics", "frame inversion"],
+      "viewport": "Home is a barcode field of copy counts; selecting a column focuses one title’s numbers while the field dims.",
+      "case": "Wins product clarity for quantity-first inventory; loses audience ID for a personal digital library.",
+      "risk": "Feels like a monitoring tool, not a library you care for.",
+      "hero": ".impeccable/mocks/decision/qb-ikeda-hero.webp",
+      "board": ".impeccable/mocks/decision/qb-ikeda.webp",
+      "wireframe": {
+        "cols": 12,
+        "rows": 14,
+        "regions": [
+          { "label": "frame index", "x": 0, "y": 0, "w": 12, "h": 1 },
+          { "label": "barcode field", "x": 0, "y": 1, "w": 9, "h": 11, "accent": true },
+          { "label": "numeric margin", "x": 9, "y": 1, "w": 3, "h": 11 },
+          { "label": "bottom nav", "x": 0, "y": 12, "w": 12, "h": 2 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/challenger-ikeda.webp"
+    },
+    {
+      "id": "challenger-sixpack",
+      "label": "Night Library Six-Pack",
+      "verdict": "competitive",
+      "lineage": "aircraft night instrument six-pack",
+      "thesis": "Library vitals as six luminous gauges you cross-check before acting.",
+      "palette": ["#0A0A0A", "#F5F5F0", "#39FF14", "#F59E0B", "#EF4444"],
+      "materials": ["matte black panel", "luminous dial faces", "radium-green needles"],
+      "viewport": "Home is two rows of three gauges: books, copies, categories, low stock, recent rate, attention; Books is the flight log.",
+      "case": "Holds Operate clarity for the dashboard; loses audience ID for book collectors vs pilots.",
+      "risk": "Aviation costume can outrank the book subject if dials dominate.",
+      "hero": ".impeccable/mocks/decision/qb-sixpack-hero.webp",
+      "board": ".impeccable/mocks/decision/qb-sixpack.webp",
+      "wireframe": {
+        "cols": 12,
+        "rows": 14,
+        "regions": [
+          { "label": "gauge", "x": 0, "y": 1, "w": 4, "h": 4, "accent": true },
+          { "label": "gauge", "x": 4, "y": 1, "w": 4, "h": 4 },
+          { "label": "gauge", "x": 8, "y": 1, "w": 4, "h": 4 },
+          { "label": "gauge", "x": 0, "y": 5, "w": 4, "h": 4 },
+          { "label": "gauge", "x": 4, "y": 5, "w": 4, "h": 4 },
+          { "label": "gauge", "x": 8, "y": 5, "w": 4, "h": 4 },
+          { "label": "log strip", "x": 0, "y": 9, "w": 12, "h": 3 },
+          { "label": "bottom nav", "x": 0, "y": 12, "w": 12, "h": 2 }
+        ]
+      },
+      "comp": ".impeccable/mocks/decision/challenger-sixpack.webp"
+    },
+    {
+      "id": "challenger-kraftwerk",
+      "label": "Man-Machine Signal Grid",
+      "verdict": "declined",
+      "lineage": "Kraftwerk man-machine band identity",
+      "thesis": "Neon traffic-grid wiring for every library node.",
+      "palette": ["#000000", "#FFFFFF", "#E10600", "#FFBF00", "#00A651"],
+      "materials": ["enamel-smooth fills", "neon line diagrams"],
+      "case": "Loses both audience ID and library clarity for personal book inventory.",
+      "kept": "Signal-lamp status vocabulary (green / amber / red) transferred into the glass case.",
+      "hero": "https://impeccable.style/worlds/cards/kraftwerk-man-machine-hero.webp",
+      "viewport": "Grid of wired nodes for each book.",
+      "risk": "Reads as synth-band merch, not a library."
+    },
+    {
+      "id": "challenger-busytown",
+      "label": "Busy Library Cutaway",
+      "verdict": "declined",
+      "lineage": "Busytown cross-section spreads",
+      "thesis": "Every shelf loses its wall; every book wears a printed label.",
+      "palette": ["#FFFFFF", "#C23B22", "#F5C518", "#3A7D44"],
+      "materials": ["gouache flats", "warm brown outlines"],
+      "case": "Loses both axes for an adult offline inventory Operate surface.",
+      "kept": "Equal-clarity specimen labels on every book card.",
+      "hero": "https://impeccable.style/worlds/cards/graphic-worlds-publishing-busytown-cross-section-hero.webp",
+      "viewport": "Cutaway library with labeled workers.",
+      "risk": "Children’s-book energy fights Material inventory trust."
+    },
+    {
+      "id": "challenger-cloud",
+      "label": "Iridescent Case Edge",
+      "verdict": "declined",
+      "lineage": "iridescent cloud-edge diffraction",
+      "thesis": "Pastel spectral fringe on an otherwise quiet glass body.",
+      "palette": ["#F7F9FC", "#94A3B8", "#A7F3D0", "#FBCFE8", "#DDD6FE"],
+      "materials": ["cloud white", "mint-rose-violet fringe"],
+      "case": "Loses audience ID and stock-task clarity.",
+      "kept": "Saturated color only at status fringes; case body stays cool.",
+      "hero": "https://impeccable.style/worlds/cards/clouds-storms-auroras-iridescent-cloud-edge-hero.webp",
+      "viewport": "Quiet field with spectral edge accents.",
+      "risk": "Atmosphere without inventory grammar."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": true },
+  "canon": true,
+  "canonCard": {
+    "label": "Glass Material library CRUD",
+    "thesis": "What book-inventory apps ship: soft indigo-purple glass cards, bottom nav, FAB, Material forms — executed at full craft.",
+    "palette": ["#312E81", "#7C3AED", "#EEF2FF", "#0F172A"],
+    "materials": ["blur cards", "gradient wash", "Material 3 components"],
+    "viewport": "Dashboard metric cards, book list with glass tiles, FAB add.",
+    "risk": "Indistinguishable from the category AI default by design.",
+    "wireframe": {
+      "cols": 12,
+      "rows": 14,
+      "regions": [
+        { "label": "metric cards", "x": 0, "y": 1, "w": 12, "h": 4, "accent": true },
+        { "label": "recent list", "x": 0, "y": 5, "w": 12, "h": 7 },
+        { "label": "bottom nav", "x": 0, "y": 12, "w": 12, "h": 2 }
+      ]
+    },
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

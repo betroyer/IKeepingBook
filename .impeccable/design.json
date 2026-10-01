@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-22T05:14:12Z",
+  "title": "Design System: I-Keeping Books",
+  "extensions": {
+    "colorMeta": {
+      "case-indigo": {
+        "role": "primary",
+        "displayName": "Case Indigo",
+        "canonical": "#1A2744",
+        "tonalRamp": ["#0B1220", "#121B30", "#1A2744", "#2A3A5C", "#4A5F84", "#7A8FAF", "#C5D0EA", "#E8EEF8"]
+      },
+      "case-deep": {
+        "role": "neutral",
+        "displayName": "Case Deep",
+        "canonical": "#0B1220",
+        "tonalRamp": ["#060A12", "#0B1220", "#151E30", "#243048", "#3D4F6A", "#6B7C98", "#A8B4C8", "#E2E8F0"]
+      },
+      "case-mist": {
+        "role": "neutral",
+        "displayName": "Case Mist",
+        "canonical": "#C5D0EA",
+        "tonalRamp": ["#3A4660", "#5A6A88", "#7A8BA8", "#9AABC8", "#B0BDDA", "#C5D0EA", "#D9E0F2", "#F0F3FA"]
+      },
+      "case-glass": {
+        "role": "neutral",
+        "displayName": "Case Glass",
+        "canonical": "#E8EEF8",
+        "tonalRamp": ["#4A5568", "#6B7A94", "#8B9BB8", "#B0BDDA", "#C5D0EA", "#D6DEEE", "#E8EEF8", "#F7F9FC"]
+      },
+      "case-glass-fill": {
+        "role": "neutral",
+        "displayName": "Glass Fill (Light)",
+        "canonical": "#99E8EEF8",
+        "tonalRamp": ["#4A556899", "#6B7A9499", "#8B9BB899", "#B0BDDA99", "#C5D0EA99", "#D6DEEE99", "#E8EEF899", "#F7F9FC99"]
+      },
+      "case-glass-fill-dark": {
+        "role": "neutral",
+        "displayName": "Glass Fill (Dark)",
+        "canonical": "#661A2744",
+        "tonalRamp": ["#0B122066", "#121B3066", "#1A274466", "#2A3A5C66", "#4A5F8466", "#7A8FAF66", "#C5D0EA66", "#E8EEF866"]
+      },
+      "purple-secondary": {
+        "role": "secondary",
+        "displayName": "Gallery Purple",
+        "canonical": "#5B4B8A",
+        "tonalRamp": ["#2A1F3D", "#3D3260", "#5B4B8A", "#7464A3", "#9485BD", "#B8AED6", "#D8D0EA", "#F2EFF8"]
+      },
+      "metal-edge": {
+        "role": "neutral",
+        "displayName": "Metal Edge",
+        "canonical": "#8B9BB8",
+        "tonalRamp": ["#3A4558", "#546278", "#6E7E98", "#8B9BB8", "#A8B4C8", "#C5D0EA", "#DDE3F0", "#F2F5FA"]
+      },
+      "label-ink": {
+        "role": "neutral",
+        "displayName": "Label Ink",
+        "canonical": "#0F172A",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F1F5F9"]
+      },
+      "label-muted": {
+        "role": "neutral",
+        "displayName": "Label Muted",
+        "canonical": "#475569",
+        "tonalRamp": ["#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#E2E8F0", "#F8FAFC"]
+      },
+      "on-dark": {
+        "role": "neutral",
+        "displayName": "On Dark",
+        "canonical": "#E8EEF8",
+        "tonalRamp": ["#4A5568", "#6B7A94", "#8B9BB8", "#B0BDDA", "#C5D0EA", "#D6DEEE", "#E8EEF8", "#F7F9FC"]
+      },
+      "gallery-wash": {
+        "role": "neutral",
+        "displayName": "Gallery Wash",
+        "canonical": "#D8D0EA",
+        "tonalRamp": ["#3D3260", "#5B4B8A", "#7A6AA8", "#9A8CC0", "#B8AED6", "#D8D0EA", "#E8E4F2", "#F7F5FB"]
+      },
+      "dialog-surface": {
+        "role": "neutral",
+        "displayName": "Dialog Surface",
+        "canonical": "#F4F7FC",
+        "tonalRamp": ["#4A5568", "#6B7A94", "#8B9BB8", "#B0BDDA", "#C5D0EA", "#DCE3F2", "#F4F7FC", "#FFFFFF"]
+      },
+      "signal-green": {
+        "role": "tertiary",
+        "displayName": "Signal Green",
+        "canonical": "#16A34A",
+        "tonalRamp": ["#14532D", "#166534", "#16A34A", "#22C55E", "#4ADE80", "#86EFAC", "#BBF7D0", "#DCFCE7"]
+      },
+      "signal-amber": {
+        "role": "tertiary",
+        "displayName": "Signal Amber",
+        "canonical": "#D97706",
+        "tonalRamp": ["#78350F", "#92400E", "#D97706", "#F59E0B", "#FBBF24", "#FCD34D", "#FDE68A", "#FEF3C7"]
+      },
+      "signal-red": {
+        "role": "tertiary",
+        "displayName": "Signal Red",
+        "canonical": "#DC2626",
+        "tonalRamp": ["#7F1D1D", "#991B1B", "#DC2626", "#EF4444", "#F87171", "#FCA5A5", "#FECACA", "#FEE2E2"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Instrument tile values (Material headlineSmall, weight 700)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "App bar titles (Material titleLarge, weight 700, letter-spacing −0.3)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section headers and specimen book names."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Supporting copy, empty-state messages, category lines."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Instrument labels, stock lines, navigation labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "elevated-pane",
+        "value": "0 8px 18px rgba(11, 18, 32, 0.14)",
+        "purpose": "Optional GlassCard lift when elevated=true (border omitted)."
+      },
+      {
+        "name": "shelf-rail",
+        "value": "0 2px 4px rgba(11, 18, 32, 0.18)",
+        "purpose": "Soft ledge under the metal CaseShelfRail."
+      },
+      {
+        "name": "lamp-glow",
+        "value": "0 1px 6px rgba(22, 163, 74, 0.45)",
+        "purpose": "Halo on signal lamps; color matches lamp status."
+      }
+    ],
+    "motion": [
+      {
+        "name": "material-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default Material state transitions (ripple, route, indicator)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "0px",
+        "purpose": "Android phone-first shell; no separate tablet layout shipped."
+      }
+    ],
+    "glass": {
+      "blurSigma": 18,
+      "borderWidth": "1px",
+      "borderColor": "rgba(139, 155, 184, 0.55)",
+      "defaultRadius": "18px"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Indigo filled action for save/confirm and glass-case CTAs.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\"><svg class=\"ds-btn-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z\"/></svg>Save book</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 14px 20px; background: #1A2744; color: #E8EEF8; border: none; border-radius: 14px; font-family: Poppins, sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s; } .ds-btn-primary:hover { background: #0B1220; } .ds-btn-primary:focus-visible { outline: 2px solid #5B4B8A; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-icon { width: 18px; height: 18px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Metal-edged secondary action paired with indigo primary.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Cancel</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 20px; background: transparent; color: #1A2744; border: 1px solid rgba(139, 155, 184, 0.7); border-radius: 14px; font-family: Poppins, sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color 0.2s, background 0.2s; } .ds-btn-outline:hover { background: rgba(232, 238, 248, 0.45); border-color: #8B9BB8; } .ds-btn-outline:focus-visible { outline: 2px solid #5B4B8A; outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Frosted search on Books — metal edge, clear when filled.",
+      "html": "<label class=\"ds-search\"><svg class=\"ds-search-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z\"/></svg><input class=\"ds-search-input\" type=\"search\" placeholder=\"Search by book name\" /></label>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; min-height: 48px; background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(139, 155, 184, 0.5); border-radius: 16px; color: #475569; } .ds-search:focus-within { border-color: #5B4B8A; border-width: 1.5px; } .ds-search-icon { width: 20px; height: 20px; flex-shrink: 0; } .ds-search-input { flex: 1; border: none; background: transparent; padding: 12px 4px; font-family: Poppins, sans-serif; font-size: 14px; color: #0F172A; outline: none; } .ds-search-input::placeholder { color: #64748B; }"
+    },
+    {
+      "name": "Bottom Navigation",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Material 3 destinations — Home, Books, Categories, More — on glass fill.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Primary\"><button class=\"ds-nav-item is-active\" type=\"button\"><span class=\"ds-nav-indicator\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z\"/></svg></span><span class=\"ds-nav-label\">Home</span></button><button class=\"ds-nav-item\" type=\"button\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z\"/></svg><span class=\"ds-nav-label\">Books</span></button><button class=\"ds-nav-item\" type=\"button\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 2 6.5 11h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z\"/></svg><span class=\"ds-nav-label\">Categories</span></button><button class=\"ds-nav-item\" type=\"button\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z\"/></svg><span class=\"ds-nav-label\">More</span></button></nav>",
+      "css": ".ds-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 8px 8px 12px; background: rgba(232, 238, 248, 0.6); font-family: Poppins, sans-serif; color: #0F172A; } .ds-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; border: none; background: transparent; color: inherit; cursor: pointer; padding: 4px; border-radius: 12px; } .ds-nav-item svg { width: 24px; height: 24px; } .ds-nav-label { font-size: 12px; font-weight: 600; } .ds-nav-indicator { display: inline-flex; padding: 4px 16px; border-radius: 16px; background: rgba(91, 75, 138, 0.28); } .ds-nav-item:hover { background: rgba(91, 75, 138, 0.08); } .ds-nav-item:focus-visible { outline: 2px solid #5B4B8A; outline-offset: 2px; } .ds-nav-item.is-active { color: #1A2744; }"
+    },
+    {
+      "name": "Glass Pane",
+      "kind": "card",
+      "refersTo": "glass-pane",
+      "description": "Default frosted case pane — blur, translucent fill, metal edge.",
+      "html": "<div class=\"ds-glass-pane\"><p class=\"ds-glass-title\">Case pane</p><p class=\"ds-glass-body\">Frosted content over gallery light.</p></div>",
+      "css": ".ds-glass-pane { padding: 16px; border-radius: 18px; background: rgba(232, 238, 248, 0.6); border: 1px solid rgba(139, 155, 184, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); font-family: Poppins, sans-serif; color: #0F172A; } .ds-glass-title { margin: 0 0 4px; font-size: 16px; font-weight: 600; } .ds-glass-body { margin: 0; font-size: 14px; color: #475569; }"
+    },
+    {
+      "name": "Instrument Tile",
+      "kind": "card",
+      "refersTo": "instrument-tile",
+      "description": "2×2 library vital — purple icon, optional signal lamp, large value.",
+      "html": "<button class=\"ds-instrument\" type=\"button\"><span class=\"ds-instrument-top\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z\"/></svg><span class=\"ds-lamp ds-lamp-green\" aria-hidden=\"true\"></span></span><span class=\"ds-instrument-value\">5</span><span class=\"ds-instrument-label\">Titles</span></button>",
+      "css": ".ds-instrument { display: flex; flex-direction: column; align-items: flex-start; width: 100%; max-width: 180px; padding: 14px; border: 1px solid rgba(139, 155, 184, 0.55); border-radius: 18px; background: rgba(232, 238, 248, 0.6); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); font-family: Poppins, sans-serif; color: #0F172A; cursor: pointer; text-align: left; transition: border-color 0.2s, box-shadow 0.2s; } .ds-instrument:hover { border-color: rgba(91, 75, 138, 0.45); box-shadow: 0 8px 18px rgba(11, 18, 32, 0.1); } .ds-instrument:focus-visible { outline: 2px solid #5B4B8A; outline-offset: 2px; } .ds-instrument-top { display: flex; width: 100%; align-items: center; justify-content: space-between; margin-bottom: 12px; color: #5B4B8A; } .ds-instrument-top svg { width: 18px; height: 18px; } .ds-instrument-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.2; } .ds-instrument-label { margin-top: 2px; font-size: 12px; font-weight: 500; color: #475569; } .ds-lamp { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.55); box-shadow: 0 1px 6px rgba(22, 163, 74, 0.45); } .ds-lamp-green { background: #16A34A; } .ds-lamp-amber { background: #D97706; box-shadow: 0 1px 6px rgba(217, 119, 6, 0.45); }"
+    },
+    {
+      "name": "Specimen Label",
+      "kind": "card",
+      "refersTo": "specimen-label",
+      "description": "Book row as printed specimen — lamp, title, category · copies.",
+      "html": "<article class=\"ds-specimen\"><span class=\"ds-lamp ds-lamp-amber\" aria-label=\"Low stock\"></span><div class=\"ds-specimen-text\"><h3 class=\"ds-specimen-title\">Oxford English Dictionary</h3><p class=\"ds-specimen-meta\">Reference Books · 1 copy</p></div></article>",
+      "css": ".ds-specimen { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 18px; background: rgba(232, 238, 248, 0.6); border: 1px solid rgba(139, 155, 184, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); font-family: Poppins, sans-serif; color: #0F172A; } .ds-specimen-text { min-width: 0; } .ds-specimen-title { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.25; } .ds-specimen-meta { margin: 4px 0 0; font-size: 12px; font-weight: 500; color: #475569; } .ds-lamp { display: inline-block; width: 10px; height: 10px; margin-top: 6px; flex-shrink: 0; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.55); } .ds-lamp-amber { background: #D97706; box-shadow: 0 1px 6px rgba(217, 119, 6, 0.45); } .ds-lamp-green { background: #16A34A; box-shadow: 0 1px 6px rgba(22, 163, 74, 0.45); }"
+    },
+    {
+      "name": "Add FAB",
+      "kind": "button",
+      "refersTo": "fab-add",
+      "description": "Books-screen indigo FAB to tend stock.",
+      "html": "<button class=\"ds-fab\" type=\"button\" aria-label=\"Add book\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z\"/></svg></button>",
+      "css": ".ds-fab { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border: none; border-radius: 16px; background: #1A2744; color: #E8EEF8; box-shadow: 0 4px 8px rgba(11, 18, 32, 0.25); cursor: pointer; transition: background 0.2s, transform 0.15s; } .ds-fab svg { width: 24px; height: 24px; } .ds-fab:hover { background: #0B1220; } .ds-fab:focus-visible { outline: 2px solid #5B4B8A; outline-offset: 3px; } .ds-fab:active { transform: scale(0.96); }"
+    },
+    {
+      "name": "Signal Lamp",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Status-only gallery lamp — green healthy, amber low stock, red error.",
+      "html": "<div class=\"ds-lamps\" role=\"group\" aria-label=\"Stock signals\"><span class=\"ds-lamp ds-lamp-green\" title=\"Healthy\"></span><span class=\"ds-lamp ds-lamp-amber\" title=\"Low stock\"></span><span class=\"ds-lamp ds-lamp-red\" title=\"Error\"></span></div>",
+      "css": ".ds-lamps { display: inline-flex; gap: 12px; align-items: center; } .ds-lamp { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.55); } .ds-lamp-green { background: #16A34A; box-shadow: 0 1px 6px rgba(22, 163, 74, 0.45); } .ds-lamp-amber { background: #D97706; box-shadow: 0 1px 6px rgba(217, 119, 6, 0.45); } .ds-lamp-red { background: #DC2626; box-shadow: 0 1px 6px rgba(220, 38, 38, 0.45); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Rare-Book Glass Case",
+    "overview": "The interface is a lit museum case for a personal library: cool indigo gallery light behind frosted panes, thin metal edges, and typed specimen labels. Surfaces read as glass under soft ambient glow, not as purple-tinted CRUD chrome or opaque admin cards. Material 3 supplies navigation, FAB, dialogs, and snackbars; brand lives in the case lighting, frosted panes, and signal lamps.\n\nDensity stays calm and labeled. Home opens the case with four instrument tiles and a glass shelf of recent specimens; Books tends stock via search, labeled list rows, and an indigo FAB. Status never becomes a decorative accent — only green, amber, or red signal lamps mark stock health.",
+    "keyCharacteristics": [
+      "Cool indigo gallery gradient with soft purple secondary wash",
+      "Frosted translucent panes (blur 18) with 1px metal-edge borders",
+      "Specimen label cards: title, category, copies — lamp first, no icon plaque",
+      "Poppins throughout Material type roles",
+      "Status only as green / amber / red signal lamps"
+    ],
+    "rules": [
+      {
+        "name": "The Signal Lamp Rule",
+        "body": "Green, amber, and red appear only as stock/error signals — never as brand accents or decorative chips.",
+        "section": "colors"
+      },
+      {
+        "name": "The Case Light Rule",
+        "body": "Screens sit on the gallery gradient (case-glass → case-mist → gallery-wash light; case-deep → case-indigo → deep purple wash dark), not on flat white or solid purple fields.",
+        "section": "colors"
+      },
+      {
+        "name": "The Specimen Type Rule",
+        "body": "Book rows read as printed labels: strong title, muted category/copies — no badge stacks or uppercase micro-kickers.",
+        "section": "typography"
+      },
+      {
+        "name": "The Pane-Not-Card Rule",
+        "body": "Prefer metal-edge border + blur over resting drop shadows. Shadows are exceptional lift, not the default surface recipe.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do build content on frosted panes with metal edges over the gallery gradient.",
+      "Do reserve green / amber / red for signal lamps (and red for destructive affordances).",
+      "Do use Poppins with Material roles: bold app titles, heavy instrument values, muted specimen metadata.",
+      "Do keep M3 patterns for nav, FAB, dialogs, and snackbars while expressing brand through case glass."
+    ],
+    "donts": [
+      "Don't turn the shell into generic purple glass CRUD — indigo case light and specimen labels lead.",
+      "Don't use status colors as section accents, chips, or brand fills.",
+      "Don't put icon plaques on book specimen rows (lamps + typography only).",
+      "Don't rely on heavy resting shadows or opaque white cards instead of frosted panes."
+    ]
+  }
+}
