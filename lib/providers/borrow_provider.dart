@@ -165,7 +165,7 @@ class BorrowProvider extends ChangeNotifier {
         } catch (e) {
           _error =
               'Borrow saved, but could not email the student: '
-              '${e.toString().replaceFirst('Exception: ', '')}';
+              '${_emailFailureMessage(e)}';
           notifyListeners();
         }
       }
@@ -193,5 +193,16 @@ class BorrowProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  String _emailFailureMessage(Object error) {
+    final raw = error.toString();
+    if (raw.contains('Failed host lookup') ||
+        raw.contains('SocketException') ||
+        raw.contains('Network is unreachable') ||
+        raw.contains('Connection timed out')) {
+      return 'no internet connection. Turn on Wi‑Fi or mobile data and try again.';
+    }
+    return raw.replaceFirst('Exception: ', '');
   }
 }

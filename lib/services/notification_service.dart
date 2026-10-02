@@ -21,13 +21,21 @@ class NotificationService {
     } catch (_) {
       // Fall back to default local zone if available.
     }
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const init = InitializationSettings(android: android);
-    await _plugin.initialize(init);
-    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    await androidPlugin?.requestNotificationsPermission();
-    _ready = true;
+    try {
+      const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const init = InitializationSettings(android: android);
+      await _plugin.initialize(init);
+      final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      await androidPlugin?.requestNotificationsPermission();
+      _ready = true;
+      // Clear a corrupt scheduled-notification cache that can throw
+      // "Missing type parameter" on cancel/load in release builds.
+      await _safeCancelAll();
+    } catch (e) {
+      debugPrint('Notification init failed: $e');
+      _ready = false;
+    }
   }
 
   Future<void> showDueSoonSummary(List<BorrowRecord> dueSoon) async {
@@ -44,12 +52,16 @@ class NotificationService {
       importance: Importance.high,
       priority: Priority.high,
     );
-    await _plugin.show(
-      91001,
-      '${dueSoon.length} loan${dueSoon.length == 1 ? '' : 's'} due tomorrow',
-      '$names$more',
-      const NotificationDetails(android: details),
-    );
+    try {
+      await _plugin.show(
+        91001,
+        '${dueSoon.length} loan${dueSoon.length == 1 ? '' : 's'} due tomorrow',
+        '$names$more',
+        const NotificationDetails(android: details),
+      );
+    } catch (e) {
+      debugPrint('Could not show due-soon summary: $e');
+    }
   }
 
   Future<void> scheduleLoanReminder(BorrowRecord record) async {
@@ -61,40 +73,32 @@ class NotificationService {
       9,
     );
     final remindAt = due.subtract(const Duration(days: 1));
-    if (!remindAt.isAfter(DateTime.now())) {
-      // Already within the reminder window — show immediately.
-      await _plugin.show(
-        92000 + record.id!,
-        'Due tomorrow: ${record.bookName}',
-        '${record.studentFullName} should return this book by ${_fmt(record.dueDate)}.',
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'due_soon',
-            'Due soon',
-            channelDescription: 'Students with books due tomorrow',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-        ),
-      );
-      return;
-    }
+    final id = 92000 + record.id!;
+    final title = 'Due tomorrow: ${record.bookName}';
+    final body =
+        '${record.studentFullName} should return this book by ${_fmt(record.dueDate)}.';
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'due_soon',
+        'Due soon',
+        channelDescription: 'Students with books due tomorrow',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+    );
 
     try {
+      if (!remindAt.isAfter(DateTime.now())) {
+        await _plugin.show(id, title, body, details);
+        return;
+      }
+
       await _plugin.zonedSchedule(
-        92000 + record.id!,
-        'Due tomorrow: ${record.bookName}',
-        '${record.studentFullName} should return this book by ${_fmt(record.dueDate)}.',
+        id,
+        title,
+        body,
         tz.TZDateTime.from(remindAt, tz.local),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'due_soon',
-            'Due soon',
-            channelDescription: 'Students with books due tomorrow',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-        ),
+        details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -106,7 +110,22 @@ class NotificationService {
 
   Future<void> cancelLoanReminder(int borrowId) async {
     if (!_ready) return;
-    await _plugin.cancel(92000 + borrowId);
+    try {
+      await _plugin.cancel(92000 + borrowId);
+    } catch (e) {
+      debugPrint('Could not cancel reminder $borrowId: $e');
+      // Gson "Missing type parameter" usually means a bad cache entry —
+      // wipe scheduled notifications so Return / Borrow can continue.
+      await _safeCancelAll();
+    }
+  }
+
+  Future<void> _safeCancelAll() async {
+    try {
+      await _plugin.cancelAll();
+    } catch (e) {
+      debugPrint('Could not clear notification cache: $e');
+    }
   }
 
   String _fmt(DateTime d) =>
