@@ -1,6 +1,7 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
+import '../models/borrow_record.dart';
 import 'smtp_settings.dart';
 
 class EmailService {
@@ -69,6 +70,8 @@ Return due: $dueDateLabel
 
 Please return ${titles.length == 1 ? 'the book' : 'the books'} on or before the due date. You will also receive a reminder by email 1 day before each title is due.
 
+If a book is still out the day after the due date, a penalty of ₱${BorrowRecord.dailyPenaltyPesos} is charged that day, then ₱${BorrowRecord.dailyPenaltyPesos} more for every extra day until it is returned.
+
 Thank you!
 ''',
     );
@@ -96,7 +99,56 @@ This is a reminder from your school library (I-Keeping Books).
 Book: $bookName
 Return due: $dueDateLabel
 
-Please return the book on or before the due date. Thank you!
+Please return the book on or before the due date. If it is still out the next day, a penalty of ₱${BorrowRecord.dailyPenaltyPesos} applies, then ₱${BorrowRecord.dailyPenaltyPesos} more for every extra day until you return it. Thank you!
+''',
+    );
+  }
+
+  Future<void> sendOverduePenalty({
+    required String toEmail,
+    required String studentName,
+    required String bookName,
+    required String dueDateLabel,
+    required int daysLate,
+    required int penaltyPesos,
+  }) async {
+    final settings = await SmtpSettingsStore.load();
+    if (!settings.isConfigured) {
+      throw Exception('Library Gmail is not set up.');
+    }
+    final daily = BorrowRecord.dailyPenaltyPesos;
+    final firstDay = daysLate <= 1;
+    await _send(
+      settings: settings,
+      toEmail: toEmail,
+      subject: firstDay
+          ? 'Overdue penalty — “$bookName” (₱$penaltyPesos)'
+          : 'Still overdue — ₱$daily/day on “$bookName” (₱$penaltyPesos due)',
+      body: firstDay
+          ? '''
+Hello $studentName,
+
+You passed the return due date for a library book (I-Keeping Books).
+
+Book: $bookName
+Was due: $dueDateLabel
+Days late: $daysLate
+Penalty today: ₱$penaltyPesos
+
+A charge of ₱$daily starts the day after the due date. If you do not return the book, another ₱$daily is added every day until it is returned.
+
+Please return the book as soon as you can.
+'''
+          : '''
+Hello $studentName,
+
+“$bookName” is still not returned. The library charges ₱$daily every day past the due date while the book is out.
+
+Was due: $dueDateLabel
+Days late: $daysLate
+Charge so far: ₱$penaltyPesos (₱$daily × $daysLate days)
+
+Return the book to stop the daily charge.
 ''',
     );
   }

@@ -30,6 +30,8 @@ class BorrowProvider extends ChangeNotifier {
 
   int get activeCount => _records.where((r) => !r.isReturned).length;
   int get overdueCount => _records.where((r) => r.isOverdue).length;
+  int get overduePenaltyPesos =>
+      _records.fold(0, (sum, r) => sum + r.penaltyPesos);
   int get dueSoonCount => _records.where((r) => r.isDueSoon).length;
 
   List<BorrowRecord> get dueSoonRecords =>

@@ -41,6 +41,7 @@ Confirmed:
 - Local Log in / Sign up (accounts stored on device in SQLite; session via SharedPreferences)
 - Log out from More
 - Student borrow records: full name, student ID, email, college (course & year) or high school (strand & year), borrow date, return due date; librarian selects one or more in-stock books per checkout (searchable checklist); one loan line per title; mark returned; stock decreases/increases with loan/return
+- Overdue penalty: ₱50 per day starting the day after the due date (due Oct 20 → Oct 21 is ₱50) while the book is still out; student Gmail gets one penalty notice per overdue day (needs library Gmail + network)
 - Librarian due-soon / overdue in-app alerts and device notifications (1 day before due)
 - Student emails from library Gmail: borrow receipt on loan + return reminder 1 day before due (More → Email reminders; requires a real Gmail + App Password)
 - No cloud backend; email sending needs network when Gmail is enabled

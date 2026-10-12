@@ -21,6 +21,9 @@ class ReminderService {
     if (dueSoon.isNotEmpty) {
       await NotificationService.instance.showDueSoonSummary(dueSoon);
     }
+    if (overdue.isNotEmpty) {
+      await NotificationService.instance.showOverduePenaltySummary(overdue);
+    }
 
     final smtp = await SmtpSettingsStore.load();
     var emailsSent = 0;
@@ -46,6 +49,29 @@ class ReminderService {
           emailErrors++;
         }
       }
+
+      final todayKey = _dayKey(DateTime.now());
+      for (final record in overdue) {
+        if (record.studentEmail.isEmpty ||
+            record.id == null ||
+            record.penaltyEmailOn == todayKey) {
+          continue;
+        }
+        try {
+          await EmailService.instance.sendOverduePenalty(
+            toEmail: record.studentEmail,
+            studentName: record.studentFullName,
+            bookName: record.bookName,
+            dueDateLabel: _dateFormat.format(record.dueDate),
+            daysLate: record.daysOverdue,
+            penaltyPesos: record.penaltyPesos,
+          );
+          await DatabaseHelper.instance.markPenaltyEmailed(record.id!, todayKey);
+          emailsSent++;
+        } catch (_) {
+          emailErrors++;
+        }
+      }
     }
 
     return ReminderRunResult(
@@ -56,6 +82,9 @@ class ReminderService {
       smtpConfigured: smtp.isConfigured,
     );
   }
+
+  String _dayKey(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 }
 
 class ReminderRunResult {

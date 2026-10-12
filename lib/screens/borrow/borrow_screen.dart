@@ -108,6 +108,31 @@ class _BorrowScreenState extends State<BorrowScreen> {
                         ),
                       ),
                     ),
+                  if (provider.overdueCount > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: GlassCard(
+                        onTap: () => provider.setFilter(BorrowFilter.active),
+                        borderColor:
+                            AppColors.signalRed.withValues(alpha: 0.5),
+                        child: Row(
+                          children: [
+                            const SignalLamp(status: SignalStatus.red),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                '${provider.overdueCount} overdue · '
+                                '₱${provider.overduePenaltyPesos} penalty',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right_rounded),
+                          ],
+                        ),
+                      ),
+                    ),
                   CustomSearchBar(
                     controller: _search,
                     hint: 'Search student, ID, email, or book',
@@ -333,6 +358,16 @@ class _BorrowCard extends StatelessWidget {
               color: AppColors.labelMuted,
             ),
           ),
+          if (record.isOverdue) ...[
+            const SizedBox(height: 6),
+            Text(
+              'Penalty ${record.penaltyLabel} · ₱${BorrowRecord.dailyPenaltyPesos}/day until returned',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: AppColors.signalRed,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -1,7 +1,7 @@
 name: i_keeping_books
 description: Offline personal digital library inventory for Android.
 publish_to: 'none'
-version: 1.5.1+7
+version: 1.6.0+8
 
 environment:
   sdk: ^3.12.2

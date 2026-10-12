@@ -24,7 +24,7 @@ class DatabaseHelper {
     final path = p.join(dbPath, AppConstants.dbName);
     return openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: (db, version) async {
         await _createBooks(db);
         await _createUsers(db);
@@ -39,6 +39,9 @@ class DatabaseHelper {
         }
         if (oldVersion < 4) {
           await _upgradeBorrowsToV4(db);
+        }
+        if (oldVersion < 5) {
+          await _upgradeBorrowsToV5(db);
         }
       },
     );
@@ -87,6 +90,7 @@ class DatabaseHelper {
         due_date TEXT NOT NULL,
         returned_at TEXT,
         reminder_sent INTEGER NOT NULL DEFAULT 0,
+        penalty_email_on TEXT,
         FOREIGN KEY (book_id) REFERENCES books (id)
       )
     ''');
@@ -112,6 +116,20 @@ class DatabaseHelper {
     if (!names.contains('reminder_sent')) {
       await db.execute(
         'ALTER TABLE borrows ADD COLUMN reminder_sent INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+  }
+
+  Future<void> _upgradeBorrowsToV5(Database db) async {
+    final info = await db.rawQuery('PRAGMA table_info(borrows)');
+    final names = info.map((r) => r['name'] as String).toSet();
+    if (names.isEmpty) {
+      await _createBorrows(db);
+      return;
+    }
+    if (!names.contains('penalty_email_on')) {
+      await db.execute(
+        'ALTER TABLE borrows ADD COLUMN penalty_email_on TEXT',
       );
     }
   }
@@ -357,6 +375,16 @@ class DatabaseHelper {
     await db.update(
       'borrows',
       {'reminder_sent': 1},
+      where: 'id = ?',
+      whereArgs: [borrowId],
+    );
+  }
+
+  Future<void> markPenaltyEmailed(int borrowId, String dayKey) async {
+    final db = await database;
+    await db.update(
+      'borrows',
+      {'penalty_email_on': dayKey},
       where: 'id = ?',
       whereArgs: [borrowId],
     );

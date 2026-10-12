@@ -44,6 +44,7 @@ class BorrowRecord {
     required this.dueDate,
     this.returnedAt,
     this.reminderSent = false,
+    this.penaltyEmailOn,
   });
 
   final int? id;
@@ -61,6 +62,12 @@ class BorrowRecord {
   final DateTime? returnedAt;
   final bool reminderSent;
 
+  /// Calendar day (`yyyy-MM-dd`) the last overdue penalty email was sent.
+  final String? penaltyEmailOn;
+
+  /// Pesos charged for each day after the due date while the book is out.
+  static const int dailyPenaltyPesos = 50;
+
   bool get isReturned => returnedAt != null;
 
   bool get isOverdue {
@@ -70,6 +77,21 @@ class BorrowRecord {
     final now = DateTime(today.year, today.month, today.day);
     return now.isAfter(due);
   }
+
+  /// Whole days past the due date. Due Oct 20 → Oct 21 is 1 day (₱50).
+  int get daysOverdue {
+    if (isReturned) return 0;
+    final today = DateTime.now();
+    final due = DateTime(dueDate.year, dueDate.month, dueDate.day);
+    final now = DateTime(today.year, today.month, today.day);
+    final days = now.difference(due).inDays;
+    return days < 0 ? 0 : days;
+  }
+
+  int get penaltyPesos => daysOverdue * dailyPenaltyPesos;
+
+  String get penaltyLabel =>
+      '₱$penaltyPesos · $daysOverdue day${daysOverdue == 1 ? '' : 's'} late';
 
   /// Active loan due tomorrow (1 day before return).
   bool get isDueSoon {
@@ -98,7 +120,9 @@ class BorrowRecord {
     DateTime? dueDate,
     DateTime? returnedAt,
     bool? reminderSent,
+    String? penaltyEmailOn,
     bool clearReturnedAt = false,
+    bool clearPenaltyEmailOn = false,
   }) {
     return BorrowRecord(
       id: id ?? this.id,
@@ -115,6 +139,8 @@ class BorrowRecord {
       dueDate: dueDate ?? this.dueDate,
       returnedAt: clearReturnedAt ? null : (returnedAt ?? this.returnedAt),
       reminderSent: reminderSent ?? this.reminderSent,
+      penaltyEmailOn:
+          clearPenaltyEmailOn ? null : (penaltyEmailOn ?? this.penaltyEmailOn),
     );
   }
 
@@ -134,6 +160,7 @@ class BorrowRecord {
       'due_date': dueDate.toIso8601String(),
       'returned_at': returnedAt?.toIso8601String(),
       'reminder_sent': reminderSent ? 1 : 0,
+      'penalty_email_on': penaltyEmailOn,
     };
   }
 
@@ -155,6 +182,7 @@ class BorrowRecord {
           ? null
           : DateTime.parse(map['returned_at'] as String),
       reminderSent: (map['reminder_sent'] as int?) == 1,
+      penaltyEmailOn: map['penalty_email_on'] as String?,
     );
   }
 }

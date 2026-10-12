@@ -152,7 +152,8 @@ class _NewBorrowScreenState extends State<NewBorrowScreen> {
                     Text(
                       'The library Gmail account (More → Email reminders) will '
                       'send a borrow receipt now and a return reminder 1 day '
-                      'before the due date.',
+                      'before the due date. After the due date, ₱50 is charged '
+                      'each day the book is still out, and the student is emailed.',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.labelMuted,
                         height: 1.4,

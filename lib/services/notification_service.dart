@@ -64,6 +64,33 @@ class NotificationService {
     }
   }
 
+  Future<void> showOverduePenaltySummary(List<BorrowRecord> overdue) async {
+    if (!_ready || overdue.isEmpty) return;
+    final total = overdue.fold<int>(0, (sum, r) => sum + r.penaltyPesos);
+    final names = overdue
+        .take(3)
+        .map((r) => '${r.studentFullName} — ${r.penaltyLabel}')
+        .join('\n');
+    final more = overdue.length > 3 ? '\n+${overdue.length - 3} more' : '';
+    const details = AndroidNotificationDetails(
+      'overdue_penalty',
+      'Overdue penalty',
+      channelDescription: 'Daily charge for books past the due date',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+    try {
+      await _plugin.show(
+        91002,
+        '${overdue.length} overdue · ₱$total penalty',
+        '$names$more',
+        const NotificationDetails(android: details),
+      );
+    } catch (e) {
+      debugPrint('Could not show overdue penalty: $e');
+    }
+  }
+
   Future<void> scheduleLoanReminder(BorrowRecord record) async {
     if (!_ready || record.id == null || record.isReturned) return;
     final due = DateTime(

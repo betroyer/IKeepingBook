@@ -52,7 +52,9 @@ class DueAlertsScreen extends StatelessWidget {
                 title: 'All clear',
                 message:
                     'No students are due tomorrow or overdue. '
-                    'Verified emails get a reminder 1 day before return when SMTP is set up.',
+                    'Students get a reminder 1 day before return, and a ₱50-per-day '
+                    'penalty email for each day a book stays out after the due date '
+                    '(when library Gmail is set up).',
                 icon: Icons.notifications_none_rounded,
               )
             : ListView(
@@ -101,7 +103,8 @@ class DueAlertsScreen extends StatelessWidget {
                           child: _AlertRow(
                             recordName: r.studentFullName,
                             detail:
-                                '${r.bookName}\nWas due ${dateFormat.format(r.dueDate)}',
+                                '${r.bookName}\nWas due ${dateFormat.format(r.dueDate)}'
+                                '\nPenalty ${r.penaltyLabel}',
                             status: SignalStatus.red,
                           ),
                         ),
